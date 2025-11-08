@@ -2,6 +2,7 @@
 using Considition2025_CsharpStarterKit.Dtos.Request;
 using Considition2025_CsharpStarterKit.Dtos.Response;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Xml.Linq;
 
 var apiKey = "5eeb877d-5150-4ba6-884e-23888104341f";
@@ -21,7 +22,7 @@ var finalScore = 0.0f;
 var goodTicks = new List<TickDto>();
 
 // Initial input for the first tick
-var currentTick = GenerateTick(map, 0);
+var currentTick = new TickDto { Tick = 0, CustomerRecommendations = [] };
 
 var input = new GameInputDto
 {
@@ -29,59 +30,54 @@ var input = new GameInputDto
     Ticks = [currentTick]
 };
 
+Recommendations rec = null;
+
 for (var i = 0; i < map.Ticks; i++)
 {
     GameResponseDto? gameResponse = null;
-    while (true)
+    //Console.WriteLine($"Playing tick: {i} with input: {input}");
+    gameResponse = await client.PostGame(input);
+
+    if (gameResponse is null)
     {
-        //Console.WriteLine($"Playing tick: {i} with input: {input}");
-        gameResponse = await client.PostGame(input);
-
-        if (gameResponse is null)
-        {
-            Console.WriteLine("Got no game response");
-            return;
-        }
-
-        finalScore = gameResponse.CustomerCompletionScore + gameResponse.KwhRevenue;
-
-        Console.WriteLine($"Tick {i} Score: {gameResponse.CustomerCompletionScore} + {gameResponse.KwhRevenue} = {finalScore}");
-        PrintCustomers(gameResponse);
-
-        // Check if we are happy with the response
-        if (ShouldMoveOnToNextTick(gameResponse))
-        {
-            // If we are, we save the current ticks in the list of good ticks
-            goodTicks.Add(currentTick);
-
-            // Generate new tick for next iteration
-            currentTick = GenerateTick(gameResponse.Map, i + 1);
-
-            // Set new input
-            input = new GameInputDto
-            {
-                MapName = mapName,
-                PlayToTick = i + 1,
-                Ticks = [..goodTicks, currentTick]
-            };
-            break;
-        }
-
-        // Not happy with the result
-        // Try with different input
-        currentTick = GenerateTick(gameResponse.Map, i);
-
-        input = new GameInputDto
-        {
-            MapName = mapName,
-            PlayToTick = i,
-            Ticks = [..goodTicks, currentTick]
-        };
+        Console.WriteLine("Got no game response");
+        return;
     }
+    rec = new Recommendations(gameResponse.Map);
+
+    finalScore = gameResponse.CustomerCompletionScore + gameResponse.KwhRevenue;
+
+    Console.WriteLine($"Tick {i} Score: {gameResponse.CustomerCompletionScore} + {gameResponse.KwhRevenue} = {finalScore} {PrintCustomerInfo(gameResponse.Map)}");
+    // PrintCustomers(gameResponse);
+
+    // If we are, we save the current ticks in the list of good ticks
+    goodTicks.Add(currentTick);
+
+    // Generate new tick for next iteration
+    currentTick = GenerateTick(gameResponse.Map, i + 1, rec);
+
+    // Set new input
+    input = new GameInputDto
+    {
+        MapName = mapName,
+        PlayToTick = i + 1,
+        Ticks = [.. goodTicks, currentTick]
+    };
+    if (i == map.Ticks - 1)
+        PrintCustomers(gameResponse);
 }
+
+string PrintCustomerInfo(MapDto map)
+{
+    var customers = new List<CustomerDto>();
+    customers.AddRange(map.Edges.SelectMany(e => e.Customers));
+    customers.AddRange(map.Nodes.SelectMany(n => n.Customers));
+    return $"Count: {customers.Count} Ran out: {customers.Count(c => c.State == CustomerState.RanOutOfJuice)} Reached: {customers.Count(c => c.State == CustomerState.DestinationReached)}";
+}
+
 input.PlayToTick = null;
 var serverResponse = await remoteClient.PostGame(input);
-Console.WriteLine($"Remote server response: {serverResponse.GameId} Score {serverResponse.CustomerCompletionScore} + {serverResponse.KwhRevenue}");
+Console.WriteLine($"Remote server response: {serverResponse.GameId} Score {serverResponse.CustomerCompletionScore} + {serverResponse.KwhRevenue} = {serverResponse.Score}");
 
 void PrintCustomers(GameResponseDto response)
 {
@@ -93,13 +89,9 @@ void PrintCustomers(GameResponseDto response)
     foreach (var customer in customers.OrderBy(c => c.Id))
     {
         Console.WriteLine($"Id {customer.Id,-10}State: {customer.State,-20}Charge {customer.ChargeRemaining}");
-
     }
 }
 
-Console.WriteLine($"Final score: {finalScore}");
-
-return;
 
 bool ShouldMoveOnToNextTick(GameResponseDto _response)
 {
@@ -107,21 +99,19 @@ bool ShouldMoveOnToNextTick(GameResponseDto _response)
     return true;
 }
 
-TickDto GenerateTick(MapDto _map, int _currentTick)
+TickDto GenerateTick(MapDto _map, int _currentTick, Recommendations rec)
 {
     // Implement logic to generate ticks for the optimal score
     return new TickDto
     {
         Tick = _currentTick,
-        CustomerRecommendations = GenerateCustomerRecommendations(_map, _currentTick)
+        CustomerRecommendations = GenerateCustomerRecommendations(_map, _currentTick, rec)
     };
 }
 
-List<CustomerRecommendationDto> GenerateCustomerRecommendations(MapDto _map, int _currentTick)
+List<CustomerRecommendationDto> GenerateCustomerRecommendations(MapDto _map, int _currentTick, Recommendations rec)
 {
-    var customerRecommendations = new List<CustomerRecommendationDto>();  
-    var chargeTo = 1.0f;
-
+    var customerRecommendations = new List<CustomerRecommendationDto>();
     foreach (var node in _map.Nodes)
     {
         var cargingStations = node.Target as ChargingStationDto;
@@ -129,7 +119,7 @@ List<CustomerRecommendationDto> GenerateCustomerRecommendations(MapDto _map, int
             continue;
         foreach (var customer in node.Customers)
         {
-            AddRecommendation(customerRecommendations, chargeTo, node, customer);
+            AddRecommendation(customerRecommendations, node, customer, rec);
         }
     }
 
@@ -141,32 +131,56 @@ List<CustomerRecommendationDto> GenerateCustomerRecommendations(MapDto _map, int
             continue;
         foreach (var customer in edge.Customers)
         {
-            AddRecommendation(customerRecommendations, chargeTo, toNode, customer);
+            AddRecommendation(customerRecommendations, toNode, customer, rec);
         }
     }
     return customerRecommendations;
 }
 
-static void AddRecommendation(List<CustomerRecommendationDto> customerRecommendations, float chargeTo, NodeDto node, CustomerDto customer)
+static void AddRecommendation(List<CustomerRecommendationDto> customerRecommendations, NodeDto chargingNode, CustomerDto customer, Recommendations rec)
 {
     // Plan the minimum needed to reach the next station
     //var (chargeTo, targetStationId, distKm) =
     //    ChargingPlanner.ComputeChargeToNextStation(map, customer, node.Id, safetyMargin: 0.20f);
     //var isGreen = ChargingPlanner.IsGreenZone(_map, node.ZoneId);
-    //var chargeTo = isGreen ? 1.0f : 0.5f;
-    if (customer.ChargeRemaining > .5f)
+    var chargeTo = 1f;
+    var station = (ChargingStationDto)chargingNode.Target!;
+    if (station.TotalAmountOfChargers - station.TotalAmountOfBrokenChargers < 1)
+    {
+        return;
+    }
+
+    //var path = rec.DijkstraPath(customer.FromNode, customer.ToNode); // this could be done once
+    //var nextNode = rec.FindNextChargingStationAfter(path, chargingNode.Id);
+    //var distance = rec.PathDistance(path, chargingNode.Id, nextNode);
+    //var neededEnergy = distance * customer.EnergyConsumptionPerKm * 1.1f;
+    //var energyLeft = customer.ChargeRemaining * customer.MaxCharge;
+
+    //if (energyLeft > neededEnergy)
+    //    return;
+
+    //var chargeTo = (neededEnergy / customer.MaxCharge);
+    if (customer.ChargeRemaining > .43f)
         return;
 
-        customerRecommendations.Add(new CustomerRecommendationDto
+    // Chose the best charger, green or cost?
+    if (rec.IsGreen(chargingNode))
+        chargeTo = 1;
+
+    if (chargeTo > 1)
+        chargeTo = 1;
+
+    customerRecommendations.Add(new CustomerRecommendationDto
     {
         CustomerId = customer.Id,
         ChargingRecommendations = new List<ChargingRecommendationDto>
                 {
                     new ChargingRecommendationDto
                     {
-                        NodeId = node.Id,
+                        NodeId = chargingNode.Id,
                         ChargeTo = chargeTo
                     }
                 }
     });
 }
+

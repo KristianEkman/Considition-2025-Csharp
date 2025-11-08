@@ -20,7 +20,11 @@ public class ConsiditionClient
         var response = await client.PostAsJsonAsync("api/game", _inputDto);
 
         if (!response.IsSuccessStatusCode)
-            return null;
+        {
+            var text = await response.Content.ReadAsStringAsync();
+            throw new Exception(text);
+        }
+
 
         return await response.Content.ReadFromJsonAsync<GameResponseDto>();
     }
