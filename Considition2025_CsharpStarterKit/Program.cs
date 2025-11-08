@@ -1,7 +1,8 @@
-﻿using System.Diagnostics;
-using Considition2025_CsharpStarterKit;
+﻿using Considition2025_CsharpStarterKit;
 using Considition2025_CsharpStarterKit.Dtos.Request;
 using Considition2025_CsharpStarterKit.Dtos.Response;
+using System.Diagnostics;
+using System.Xml.Linq;
 
 var apiKey = "5eeb877d-5150-4ba6-884e-23888104341f";
 var client = new ConsiditionClient("http://localhost:8181", apiKey);
@@ -33,7 +34,7 @@ for (var i = 0; i < map.Ticks; i++)
     GameResponseDto? gameResponse = null;
     while (true)
     {
-        Console.WriteLine($"Playing tick: {i} with input: {input}");
+        //Console.WriteLine($"Playing tick: {i} with input: {input}");
         gameResponse = await client.PostGame(input);
 
         if (gameResponse is null)
@@ -43,6 +44,7 @@ for (var i = 0; i < map.Ticks; i++)
         }
 
         finalScore = gameResponse.CustomerCompletionScore + gameResponse.KwhRevenue;
+
         Console.WriteLine($"Tick {i} Score: {gameResponse.CustomerCompletionScore} + {gameResponse.KwhRevenue} = {finalScore}");
         PrintCustomers(gameResponse);
 
@@ -79,7 +81,7 @@ for (var i = 0; i < map.Ticks; i++)
 }
 input.PlayToTick = null;
 var serverResponse = await remoteClient.PostGame(input);
-Console.WriteLine($"Remote server response: {serverResponse.GameId} Score {serverResponse.Score}");
+Console.WriteLine($"Remote server response: {serverResponse.GameId} Score {serverResponse.CustomerCompletionScore} + {serverResponse.KwhRevenue}");
 
 void PrintCustomers(GameResponseDto response)
 {
@@ -118,6 +120,7 @@ TickDto GenerateTick(MapDto _map, int _currentTick)
 List<CustomerRecommendationDto> GenerateCustomerRecommendations(MapDto _map, int _currentTick)
 {
     var customerRecommendations = new List<CustomerRecommendationDto>();  
+    var chargeTo = 1.0f;
 
     foreach (var node in _map.Nodes)
     {
@@ -126,19 +129,8 @@ List<CustomerRecommendationDto> GenerateCustomerRecommendations(MapDto _map, int
             continue;
         foreach (var customer in node.Customers)
         {
-            customerRecommendations.Add(new CustomerRecommendationDto
-            {
-                CustomerId = customer.Id,
-                ChargingRecommendations = new List<ChargingRecommendationDto>
-                {
-                    new ChargingRecommendationDto
-                    {
-                        NodeId = node.Id,
-                        ChargeTo = 1
-                    }
-                }
-            });
-         }
+            AddRecommendation(customerRecommendations, chargeTo, node, customer);
+        }
     }
 
     foreach (var edge in _map.Edges)
@@ -149,19 +141,32 @@ List<CustomerRecommendationDto> GenerateCustomerRecommendations(MapDto _map, int
             continue;
         foreach (var customer in edge.Customers)
         {
-            customerRecommendations.Add(new CustomerRecommendationDto
-            {
-                CustomerId = customer.Id,
-                ChargingRecommendations = new List<ChargingRecommendationDto>
+            AddRecommendation(customerRecommendations, chargeTo, toNode, customer);
+        }
+    }
+    return customerRecommendations;
+}
+
+static void AddRecommendation(List<CustomerRecommendationDto> customerRecommendations, float chargeTo, NodeDto node, CustomerDto customer)
+{
+    // Plan the minimum needed to reach the next station
+    //var (chargeTo, targetStationId, distKm) =
+    //    ChargingPlanner.ComputeChargeToNextStation(map, customer, node.Id, safetyMargin: 0.20f);
+    //var isGreen = ChargingPlanner.IsGreenZone(_map, node.ZoneId);
+    //var chargeTo = isGreen ? 1.0f : 0.5f;
+    if (customer.ChargeRemaining > .5f)
+        return;
+
+        customerRecommendations.Add(new CustomerRecommendationDto
+    {
+        CustomerId = customer.Id,
+        ChargingRecommendations = new List<ChargingRecommendationDto>
                 {
                     new ChargingRecommendationDto
                     {
-                        NodeId = toNode.Id,
-                        ChargeTo = 1
+                        NodeId = node.Id,
+                        ChargeTo = chargeTo
                     }
                 }
-            });
-         }
-    }
-    return customerRecommendations;
+    });
 }
