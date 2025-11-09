@@ -48,7 +48,7 @@ for (var i = 0; i < map.Ticks; i++)
     finalScore = gameResponse.CustomerCompletionScore + gameResponse.KwhRevenue;
 
     Console.WriteLine($"Tick {i} Score: {gameResponse.CustomerCompletionScore} + {gameResponse.KwhRevenue} = {finalScore} {PrintCustomerInfo(gameResponse.Map)}");
-    // PrintCustomers(gameResponse);
+    // PrintCustomers(gameResponse, i);
 
     // If we are, we save the current ticks in the list of good ticks
     goodTicks.Add(currentTick);
@@ -64,8 +64,12 @@ for (var i = 0; i < map.Ticks; i++)
         Ticks = [.. goodTicks, currentTick]
     };
     if (i == map.Ticks - 1)
-        PrintCustomers(gameResponse);
+        PrintCustomers(gameResponse, i);
 }
+
+input.PlayToTick = null;
+var serverResponse = await remoteClient.PostGame(input);
+Console.WriteLine($"Remote server response: {serverResponse.GameId} Score {serverResponse.CustomerCompletionScore} + {serverResponse.KwhRevenue} = {serverResponse.Score}");
 
 string PrintCustomerInfo(MapDto map)
 {
@@ -75,48 +79,65 @@ string PrintCustomerInfo(MapDto map)
     return $"Count: {customers.Count} Ran out: {customers.Count(c => c.State == CustomerState.RanOutOfJuice)} Reached: {customers.Count(c => c.State == CustomerState.DestinationReached)}";
 }
 
-input.PlayToTick = null;
-var serverResponse = await remoteClient.PostGame(input);
-Console.WriteLine($"Remote server response: {serverResponse.GameId} Score {serverResponse.CustomerCompletionScore} + {serverResponse.KwhRevenue} = {serverResponse.Score}");
-
-void PrintCustomers(GameResponseDto response)
+void PrintCustomers(GameResponseDto response, int tick)
 {
     var map = response.Map;
-    var customers = new List<CustomerDto>();
-    customers.AddRange(map.Edges.SelectMany(e => e.Customers));
-    customers.AddRange(map.Nodes.SelectMany(n => n.Customers));
-
-    foreach (var customer in customers.OrderBy(c => c.Id))
+    var items = new List<(CustomerDto Customer, string At)>();
+    foreach (var node in map.Nodes)
     {
-        Console.WriteLine($"Id {customer.Id,-10}State: {customer.State,-20}Charge {customer.ChargeRemaining}");
+        foreach (var customer in node.Customers)
+        {
+            items.Add((customer, node.Id));
+        }
+    }
+
+    foreach (var edge in map.Edges)
+    {
+        foreach (var customer in edge.Customers)
+        {
+            items.Add((customer, $"{edge.FromNode}->{edge.ToNode}"));
+        }
+    }
+
+    foreach (var item in items.OrderBy(c => c.Customer.Id))//.Where(x => x.Customer.Id == "0.7"))
+    {
+        Console.WriteLine($"Tick:{tick,-4}Id {item.Customer.Id,-10}State: {item.Customer.State,-20}At:{item.At,-10}Charge {item.Customer.ChargeRemaining}");
     }
 }
 
-
-bool ShouldMoveOnToNextTick(GameResponseDto _response)
-{
-    // Implement logic to decide if the current tick should continue to be iterated on or move on to the next tick
-    return true;
-}
-
-TickDto GenerateTick(MapDto _map, int _currentTick, Recommendations rec)
+TickDto GenerateTick(MapDto map, int tick, Recommendations rec)
 {
     // Implement logic to generate ticks for the optimal score
+    if (tick == 1)
+    {
+        return new TickDto
+        {
+            Tick = tick,
+            CustomerRecommendations = new List<CustomerRecommendationDto>()
+        };
+    }
+
     return new TickDto
     {
-        Tick = _currentTick,
-        CustomerRecommendations = GenerateCustomerRecommendations(_map, _currentTick, rec)
+        Tick = tick,
+        CustomerRecommendations = GenerateCustomerRecommendations(map, tick, rec)
     };
 }
 
 List<CustomerRecommendationDto> GenerateCustomerRecommendations(MapDto _map, int _currentTick, Recommendations rec)
 {
     var customerRecommendations = new List<CustomerRecommendationDto>();
+
     foreach (var node in _map.Nodes)
     {
-        var cargingStations = node.Target as ChargingStationDto;
-        if (cargingStations is null)
-            continue;
+        foreach (var customer in node.Customers)
+        {
+            AddRerouteIfNeeded(customer, node, rec, customerRecommendations, map);
+        }
+    }
+    
+    foreach (var node in _map.Nodes)
+    {
         foreach (var customer in node.Customers)
         {
             AddRecommendation(customerRecommendations, node, customer, rec);
@@ -126,9 +147,6 @@ List<CustomerRecommendationDto> GenerateCustomerRecommendations(MapDto _map, int
     foreach (var edge in _map.Edges)
     {
         var toNode = map.Nodes.Single(n => n.Id == edge.ToNode);
-        var chargingStation = toNode.Target as ChargingStationDto;
-        if (chargingStation is null)
-            continue;
         foreach (var customer in edge.Customers)
         {
             AddRecommendation(customerRecommendations, toNode, customer, rec);
@@ -137,35 +155,41 @@ List<CustomerRecommendationDto> GenerateCustomerRecommendations(MapDto _map, int
     return customerRecommendations;
 }
 
-static void AddRecommendation(List<CustomerRecommendationDto> customerRecommendations, NodeDto chargingNode, CustomerDto customer, Recommendations rec)
+static void AddRecommendation(List<CustomerRecommendationDto> customerRecommendations, NodeDto atNode, CustomerDto customer, Recommendations rec)
 {
-    // Plan the minimum needed to reach the next station
-    //var (chargeTo, targetStationId, distKm) =
-    //    ChargingPlanner.ComputeChargeToNextStation(map, customer, node.Id, safetyMargin: 0.20f);
-    //var isGreen = ChargingPlanner.IsGreenZone(_map, node.ZoneId);
     var chargeTo = 1f;
-    var station = (ChargingStationDto)chargingNode.Target!;
+    var station = atNode.Target as ChargingStationDto;
+    if (station is null)
+    {    
+        return;
+    }
+
     if (station.TotalAmountOfChargers - station.TotalAmountOfBrokenChargers < 1)
     {
         return;
     }
 
     //var path = rec.DijkstraPath(customer.FromNode, customer.ToNode); // this could be done once
-    //var nextNode = rec.FindNextChargingStationAfter(path, chargingNode.Id);
-    //var distance = rec.PathDistance(path, chargingNode.Id, nextNode);
-    //var neededEnergy = distance * customer.EnergyConsumptionPerKm * 1.1f;
+    //var nextStation = rec.FindNextChargingStationAfter(path, chargingNode.Id);
+    //var distanceToGoal = rec.PathDistance(path, chargingNode.Id, customer.ToNode);
+    //var distanceToNextStation = rec.PathDistance(path, chargingNode.Id, nextStation);
+    //var neededEnergyToGoal = distanceToGoal * customer.EnergyConsumptionPerKm;
+    //var neededEnergyToNextStation = distanceToNextStation * customer.EnergyConsumptionPerKm;
     //var energyLeft = customer.ChargeRemaining * customer.MaxCharge;
 
-    //if (energyLeft > neededEnergy)
+    //if (energyLeft > neededEnergyToGoal)
     //    return;
 
-    //var chargeTo = (neededEnergy / customer.MaxCharge);
+    // Select if we should charge at this node or the next.
+
+    chargeTo = 1;// (neededEnergyToGoal / customer.MaxCharge) * 1.2f;
+
     if (customer.ChargeRemaining > .43f)
         return;
 
-    // Chose the best charger, green or cost?
-    if (rec.IsGreen(chargingNode))
-        chargeTo = 1;
+    // Chose the best charger, green or cost? Does nothing it seams
+    //if (rec.IsGreen(chargingNode))
+    //    chargeTo = 1;
 
     if (chargeTo > 1)
         chargeTo = 1;
@@ -177,10 +201,74 @@ static void AddRecommendation(List<CustomerRecommendationDto> customerRecommenda
                 {
                     new ChargingRecommendationDto
                     {
-                        NodeId = chargingNode.Id,
+                        NodeId = atNode.Id,
                         ChargeTo = chargeTo
                     }
                 }
     });
+
+    //Console.WriteLine($"Recommending charge to {chargeTo} at station {chargingNode.Id}");
+
 }
 
+static void AddRerouteIfNeeded(CustomerDto customer, NodeDto atNode, Recommendations rec, List<CustomerRecommendationDto> customerRecommendations, MapDto map)
+{
+    var path = rec.DijkstraPath(atNode.Id, customer.ToNode);
+    var dis = rec.PathDistance(path, atNode.Id, customer.ToNode);
+    var energy = dis * customer.EnergyConsumptionPerKm;
+    if (customer.ChargeRemaining * customer.MaxCharge > energy)
+        return;
+
+    foreach (var nodeId in path)
+    {
+        var node = map.Nodes.Single(n => n.Id == nodeId);
+        var station = node.Target as ChargingStationDto;
+        if (station != null && station.TotalAmountOfChargers - station.TotalAmountOfBrokenChargers > 0) return;
+        // also filter out if there is no power in that zone
+    }
+
+    // No good station found on path
+    var allStations = map.Nodes.Where(n => n.Target is ChargingStationDto).ToList();
+    var nearestDistance = float.MaxValue;
+    NodeDto bestStation = null;
+    foreach (var toStation in allStations)
+    {
+        var toStationPath = rec.DijkstraPath(atNode.Id, toStation.Id);
+
+        // Can I reach this station?
+        if (toStationPath == null || !toStationPath.Any())
+        {
+            continue;
+        }
+        ;
+
+        // Can this station reach the goal?
+        var toGoalPAth = rec.DijkstraPath(toStation.Id, customer.ToNode);
+        if (toGoalPAth == null || !toGoalPAth.Any())
+        {
+            continue;
+        }
+
+        toStationPath.AddRange(toGoalPAth.Skip(1));
+        var dist = rec.PathDistance(toStationPath, atNode.Id, toStation.Id);
+        if (dist < nearestDistance)
+        {
+            nearestDistance = dist;
+            bestStation = toStation;
+        }
+    }
+    if (bestStation == null) return;
+    customerRecommendations.Add(new CustomerRecommendationDto
+    {
+        CustomerId = customer.Id,
+        ChargingRecommendations = new List<ChargingRecommendationDto>
+        {
+            new ChargingRecommendationDto
+            {
+                ChargeTo = 1,
+                NodeId = bestStation.Id,
+            }
+        }
+    });
+    Console.WriteLine($"Re-route {customer.Id} to {bestStation.Id}");
+}

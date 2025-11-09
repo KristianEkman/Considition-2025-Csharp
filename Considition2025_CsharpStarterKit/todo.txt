@@ -1,0 +1,5 @@
+﻿- Check why some cars runs out.
+- Save a tick by not doing last charge?
+- Search for best value locally of important constants
+- Test if it is possible to change path.
+- Optimera kartan osv.
