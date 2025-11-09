@@ -1,5 +1,18 @@
-﻿- Check why some cars runs out.
-- Save a tick by not doing last charge?
-- Search for best value locally of important constants
+﻿
+Search for best value locally of important constants
+
+Look at awailable energy in different zones.
+
+Prefer Green Energy.
+
+Optimera kartan osv.
+
+Check why some cars runs out.
+	- Probably cause it cant even reach nearest charger.
+	Disregard routing to stations that are to far away even if the combined path is the shortest.
+
+Save a tick by not doing last charge?
+	- It seams better to find a ballance since charging gives score.
+
 - Test if it is possible to change path.
-- Optimera kartan osv.
+	- It seams so
