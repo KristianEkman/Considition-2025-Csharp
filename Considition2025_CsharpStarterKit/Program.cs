@@ -82,36 +82,36 @@ public class Program
             input.PlayToTick = null;
             var serverResponse = await remoteClient.PostGame(input);
             Console.WriteLine($"Remote server response: {serverResponse.GameId} Score {serverResponse.CustomerCompletionScore} + {serverResponse.KwhRevenue} = {serverResponse.Score}");
+        }        
+    }
+
+    static void PrintCustomers(GameResponseDto response, int tick, string filter = null)
+    {
+        var map = response.Map;
+        var items = new List<(CustomerDto Customer, string At)>();
+        foreach (var node in map.Nodes)
+        {
+            foreach (var customer in node.Customers)
+            {
+                items.Add((customer, node.Id));
+            }
         }
 
-        void PrintCustomers(GameResponseDto response, int tick, string filter = null)
+        foreach (var edge in map.Edges)
         {
-            var map = response.Map;
-            var items = new List<(CustomerDto Customer, string At)>();
-            foreach (var node in map.Nodes)
+            foreach (var customer in edge.Customers)
             {
-                foreach (var customer in node.Customers)
-                {
-                    items.Add((customer, node.Id));
-                }
+                items.Add((customer, $"{edge.FromNode}->{edge.ToNode}"));
             }
+        }
 
-            foreach (var edge in map.Edges)
-            {
-                foreach (var customer in edge.Customers)
-                {
-                    items.Add((customer, $"{edge.FromNode}->{edge.ToNode}"));
-                }
-            }
+        var filtered = items.OrderBy(c => c.Customer.Id).ToArray();
+        if (!string.IsNullOrEmpty(filter))
+            filtered = filtered.Where(f => f.Customer.Id == filter).ToArray();
 
-            var filtered = items.OrderBy(c => c.Customer.Id).ToArray();
-            if (!string.IsNullOrEmpty(filter))
-                filtered = filtered.Where(f => f.Customer.Id == filter).ToArray();
-
-            foreach (var item in filtered)//.Where(x => x.Customer.Id == "0.7"))
-            {
-                Console.WriteLine($"Tick:{tick,-4}Id {item.Customer.Id,-10}State: {item.Customer.State,-20}At:{item.At,-10}Charge {item.Customer.ChargeRemaining}");
-            }
+        foreach (var item in filtered)//.Where(x => x.Customer.Id == "0.7"))
+        {
+            Console.WriteLine($"Tick:{tick,-4}Id {item.Customer.Id,-10}State: {item.Customer.State,-20}At:{item.At,-10}Charge {item.Customer.ChargeRemaining}");
         }
     }
 
@@ -188,20 +188,20 @@ public class Program
             return;
         }
 
-        //var path = rec.DijkstraPath(customer.FromNode, customer.ToNode); // this could be done once
+        //var path = rec.DijkstraPath(atNode.Id, customer.ToNode); // this could be done once
         //var nextStation = rec.FindNextChargingStationAfter(path, chargingNode.Id);
-        //var distanceToGoal = rec.PathDistance(path, chargingNode.Id, customer.ToNode);
+        //var distanceToGoal = rec.PathDistance(path, atNode.Id, customer.ToNode);
         //var distanceToNextStation = rec.PathDistance(path, chargingNode.Id, nextStation);
-        //var neededEnergyToGoal = distanceToGoal * customer.EnergyConsumptionPerKm;
+        //var neededEnergyToGoal = distanceToGoal * customer.EnergyConsumptionPerKm * 0.9f;
         //var neededEnergyToNextStation = distanceToNextStation * customer.EnergyConsumptionPerKm;
         //var energyLeft = customer.ChargeRemaining * customer.MaxCharge;
-
         //if (energyLeft > neededEnergyToGoal)
         //    return;
+        // It seams to be a good idea to charge
 
         // Select if we should charge at this node or the next.
 
-        chargeTo = 1;// (neededEnergyToGoal / customer.MaxCharge) * 1.2f;
+        chargeTo = 1f;// (neededEnergyToGoal / customer.MaxCharge) * 1.2f;
 
         if (customer.ChargeRemaining > ConfigParams.SkipChargeLimit)
             return;

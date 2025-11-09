@@ -1,9 +1,11 @@
-﻿
-Search for best value locally of important constants
+﻿Try own configs
+- Kolla om andara banor finns i dll
 
 Look at awailable energy in different zones.
-
-Prefer Green Energy.
+	- Select from current and next zone.
+	- Prefer Green Energy.
+	- Prefer when charging is faster.
+	- Disregard if energy is low
 
 Optimera kartan osv.
 
@@ -16,3 +18,6 @@ Save a tick by not doing last charge?
 
 - Test if it is possible to change path.
 	- It seams so
+
+Search for best value locally of important constants
+- Done manually
