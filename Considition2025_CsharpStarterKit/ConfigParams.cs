@@ -8,10 +8,36 @@ namespace Considition2025_CsharpStarterKit;
 
 internal static class ConfigParams
 {
-    public static float SkipChargeLimit { get; set; } = 0.43f;
+    public static float SkipChargeLimit { get; set; } = 0.47f;
 
-    static void WriteLine()
+    public static bool SaveToServer { get; set; } = false;
+
+    public static string MapName { get; set; } = "";
+
+    internal static void ReadInput(string[]? args)
     {
-        Console.WriteLine($"SkipChargeLimit: {SkipChargeLimit}");
+        if (args == null || args.Length == 0) return;
+
+        Console.WriteLine($"Save {SaveToServer}");
+        for (int i = 0; i < args.Length; i++)
+        {
+            switch (i)
+            {
+                case 0:
+                    MapName = args[i];
+                    break;
+                case 1:
+                    SkipChargeLimit = float.Parse(args[i]);
+                    break;    
+
+                default:
+                    break;
+            }
+        }
+    }
+
+    internal static void WriteLine()
+    {
+        Console.WriteLine($"Map: {MapName} SkipChargeLimit: {SkipChargeLimit} Save: {SaveToServer}");
     }
 }

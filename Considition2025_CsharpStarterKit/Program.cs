@@ -12,8 +12,11 @@ public class Program
         var apiKey = "5eeb877d-5150-4ba6-884e-23888104341f";
         var client = new ConsiditionClient("http://localhost:8181", apiKey);
         var remoteClient = new ConsiditionClient("https://api.considition.com", apiKey);
+        
+        ConfigParams.ReadInput(args);
+        ConfigParams.WriteLine();
+        var mapName = ConfigParams.MapName != "" ? ConfigParams.MapName : "Turbohill";
 
-        var mapName = (args != null && args.Length > 0) ? args[0] : "Turbohill";
         var map = await client.GetMap(mapName);
 
         if (map is null)
@@ -21,6 +24,8 @@ public class Program
             Console.WriteLine("Failed to fetch map!");
             return;
         }
+
+        Console.WriteLine($"{map.Name} {map.DimX}x{map.DimY} {map.Ticks}");
 
         var finalScore = 0.0f;
         var goodTicks = new List<TickDto>();
@@ -33,8 +38,6 @@ public class Program
             MapName = mapName,
             Ticks = [currentTick]
         };
-
-
 
         Recommendations rec = null;
 
@@ -53,6 +56,9 @@ public class Program
 
             finalScore = gameResponse.CustomerCompletionScore + gameResponse.KwhRevenue;
 
+            if (i == map.Ticks - 1)
+                PrintCustomers(gameResponse, i);
+
             Console.WriteLine($"Tick {i} Score: {gameResponse.CustomerCompletionScore} + {gameResponse.KwhRevenue} = {finalScore} {PrintCustomerInfo(gameResponse.Map)}");
             // PrintCustomers(gameResponse, i);
 
@@ -68,14 +74,15 @@ public class Program
                 MapName = mapName,
                 PlayToTick = i + 1,
                 Ticks = [.. goodTicks, currentTick]
-            };
-            if (i == map.Ticks - 1)
-                PrintCustomers(gameResponse, i);
+            };            
         }
 
-        //input.PlayToTick = null;
-        //var serverResponse = await remoteClient.PostGame(input);
-        //Console.WriteLine($"Remote server response: {serverResponse.GameId} Score {serverResponse.CustomerCompletionScore} + {serverResponse.KwhRevenue} = {serverResponse.Score}");
+        if (ConfigParams.SaveToServer)
+        {
+            input.PlayToTick = null;
+            var serverResponse = await remoteClient.PostGame(input);
+            Console.WriteLine($"Remote server response: {serverResponse.GameId} Score {serverResponse.CustomerCompletionScore} + {serverResponse.KwhRevenue} = {serverResponse.Score}");
+        }
 
         void PrintCustomers(GameResponseDto response, int tick, string filter = null)
         {
