@@ -3,16 +3,16 @@ using Considition2025_CsharpStarterKit.Dtos.Response;
 
 class Recommendations
 {
-    public Recommendations(MapDto map)
+    public void SetMap(MapDto map)
     {
-        Adjacency = BuildAdjacency(map);
         Map = map;
     }
 
-    private Dictionary<string, List<(string to, float w)>> Adjacency { get; }
-    public MapDto Map { get; }
+    private Dictionary<string, List<(string to, float w)>> Adjacency { get; set; }
+    public MapDto Map { get; private set; }
+    private Dictionary<(string start, string goal), List<string>> PathCache { get; set; } = new();
 
-    private static Dictionary<string, List<(string to, float w)>> BuildAdjacency(MapDto map)
+    public void BuildAdjacency(MapDto map)
     {
         var adj = new Dictionary<string, List<(string to, float w)>>();
         foreach (var node in map.Nodes)
@@ -23,12 +23,17 @@ class Recommendations
             if (!adj.ContainsKey(e.FromNode)) adj[e.FromNode] = new List<(string to, float w)>();
             adj[e.FromNode].Add((e.ToNode, e.Length));
         }
-        return adj;
+        Adjacency = adj;
     }
 
     public List<string> DijkstraPath(string start, string goal)
     {
         if (!Adjacency.ContainsKey(start) || !Adjacency.ContainsKey(goal)) return new List<string>();
+
+        // Check cache first
+        var cacheKey = (start, goal);
+        if (PathCache.TryGetValue(cacheKey, out var cachedPath))
+            return new List<string>(cachedPath);
 
         var dist = new Dictionary<string, float>();
         var prev = new Dictionary<string, string?>();
@@ -68,6 +73,9 @@ class Recommendations
             cur = prev[cur];
         }
         path.Reverse();
+
+        // Cache the result
+        PathCache[(start, goal)] = new List<string>(path);
         return path;
     }
 
@@ -109,7 +117,7 @@ class Recommendations
         return total;
     }
 
-    public  static float SafeChargeTargetFraction(float neededEnergy, float maxEnergy, float currentEnergy, float bufferFraction)
+    public static float SafeChargeTargetFraction(float neededEnergy, float maxEnergy, float currentEnergy, float bufferFraction)
     {
         if (maxEnergy <= 0) return 1f;
         var frac = neededEnergy / maxEnergy;
@@ -124,7 +132,7 @@ class Recommendations
         var station = (ChargingStationDto)chargingNode.Target;
         var zone = Map.Zones.Single(z => chargingNode.ZoneId == z.Id);
         if (zone == null) return false;
-        var good = new[] {"Hydro", "Solar", "Wind" };
+        var good = new[] { "Hydro", "Solar", "Wind" };
         return zone.EnergySources.Any(e => good.Contains(e.Type));
     }
 }

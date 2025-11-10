@@ -12,12 +12,15 @@ public class Program
         var apiKey = "5eeb877d-5150-4ba6-884e-23888104341f";
         var client = new ConsiditionClient("http://localhost:8181", apiKey);
         var remoteClient = new ConsiditionClient("https://api.considition.com", apiKey);
-        
+
         ConfigParams.ReadInput(args);
         ConfigParams.WriteLine();
         var mapName = ConfigParams.MapName != "" ? ConfigParams.MapName : "Turbohill";
-
         var map = await client.GetMap(mapName);
+        Recommendations rec = new Recommendations();
+        rec.SetMap(map);
+        rec.BuildAdjacency(map);
+        
 
         if (map is null)
         {
@@ -39,7 +42,6 @@ public class Program
             Ticks = [currentTick]
         };
 
-        Recommendations rec = null;
 
         for (var i = 0; i < map.Ticks; i++)
         {
@@ -52,7 +54,7 @@ public class Program
                 Console.WriteLine("Got no game response");
                 return;
             }
-            rec = new Recommendations(gameResponse.Map);
+            rec.SetMap(gameResponse.Map);
 
             finalScore = gameResponse.CustomerCompletionScore + gameResponse.KwhRevenue;
 
@@ -74,7 +76,7 @@ public class Program
                 MapName = mapName,
                 PlayToTick = i + 1,
                 Ticks = [.. goodTicks, currentTick]
-            };            
+            };
         }
 
         if (ConfigParams.SaveToServer)
@@ -82,7 +84,7 @@ public class Program
             input.PlayToTick = null;
             var serverResponse = await remoteClient.PostGame(input);
             Console.WriteLine($"Remote server response: {serverResponse.GameId} Score {serverResponse.CustomerCompletionScore} + {serverResponse.KwhRevenue} = {serverResponse.Score}");
-        }        
+        }
     }
 
     static void PrintCustomers(GameResponseDto response, int tick, string filter = null)
@@ -257,7 +259,7 @@ public class Program
             if (toStationPath == null || !toStationPath.Any())
             {
                 continue;
-            }            
+            }
 
             // Can this station reach the goal?
             var toGoalPAth = rec.DijkstraPath(toStation.Id, customer.ToNode);
