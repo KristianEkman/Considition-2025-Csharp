@@ -1,0 +1,10 @@
+
+----------------
+2025-11-10 12:30:50
+Map:  SkipChargeLimit: 0,47 Save: False
+Final Score: 3560 + 1597 = 5157 Count: 76 Ran out: 2 Reached: 56
+
+----------------
+2025-11-10 12:35:33
+Map:  SkipChargeLimit: 0,47 Save: False
+Final Score: 3560 + 1597 = 5157 Count: 76 Ran out: 2 Reached: 56

@@ -16,7 +16,8 @@ internal static class ConfigParams
 
     internal static void ReadInput(string[]? args)
     {
-        if (args == null || args.Length == 0) return;
+        if (args == null || args.Length == 0)
+            return;
 
         Console.WriteLine($"Save {SaveToServer}");
         for (int i = 0; i < args.Length; i++)
@@ -28,7 +29,7 @@ internal static class ConfigParams
                     break;
                 case 1:
                     SkipChargeLimit = float.Parse(args[i]);
-                    break;    
+                    break;
 
                 default:
                     break;
@@ -36,8 +37,8 @@ internal static class ConfigParams
         }
     }
 
-    internal static void WriteLine()
+    internal static string WriteLine()
     {
-        Console.WriteLine($"Map: {MapName} SkipChargeLimit: {SkipChargeLimit} Save: {SaveToServer}");
+        return $"Map: {MapName} SkipChargeLimit: {SkipChargeLimit} Save: {SaveToServer}";
     }
 }

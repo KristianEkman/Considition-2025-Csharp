@@ -1,9 +1,9 @@
-﻿using Considition2025_CsharpStarterKit;
-using Considition2025_CsharpStarterKit.Dtos.Request;
-using Considition2025_CsharpStarterKit.Dtos.Response;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Xml.Linq;
+using Considition2025_CsharpStarterKit;
+using Considition2025_CsharpStarterKit.Dtos.Request;
+using Considition2025_CsharpStarterKit.Dtos.Response;
 
 public class Program
 {
@@ -15,12 +15,23 @@ public class Program
 
         ConfigParams.ReadInput(args);
         ConfigParams.WriteLine();
+        // log time stamp
+        File.AppendAllLines(
+            "log.txt",
+            new[]
+            {
+                "\n----------------",
+                DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+                ConfigParams.WriteLine(),
+            }
+        );
+
         var mapName = ConfigParams.MapName != "" ? ConfigParams.MapName : "Turbohill";
+        ConfigParams.MapName = mapName;
         var map = await client.GetMap(mapName);
         Recommendations rec = new Recommendations();
         rec.SetMap(map);
         rec.BuildAdjacency(map);
-        
 
         if (map is null)
         {
@@ -36,12 +47,7 @@ public class Program
         // Initial input for the first tick
         var currentTick = new TickDto { Tick = 0, CustomerRecommendations = [] };
 
-        var input = new GameInputDto
-        {
-            MapName = mapName,
-            Ticks = [currentTick]
-        };
-
+        var input = new GameInputDto { MapName = mapName, Ticks = [currentTick] };
 
         for (var i = 0; i < map.Ticks; i++)
         {
@@ -59,9 +65,19 @@ public class Program
             finalScore = gameResponse.CustomerCompletionScore + gameResponse.KwhRevenue;
 
             if (i == map.Ticks - 1)
+            {
                 PrintCustomers(gameResponse, i);
+                File.AppendAllLines(
+                    "log.txt",
+                    [
+                        $"Final Score: {gameResponse.CustomerCompletionScore} + {gameResponse.KwhRevenue} = {finalScore} {PrintCustomerInfo(gameResponse.Map)}",
+                    ]
+                );
+            }
 
-            Console.WriteLine($"Tick {i} Score: {gameResponse.CustomerCompletionScore} + {gameResponse.KwhRevenue} = {finalScore} {PrintCustomerInfo(gameResponse.Map)}");
+            Console.WriteLine(
+                $"Tick {i} Score: {gameResponse.CustomerCompletionScore} + {gameResponse.KwhRevenue} = {finalScore} {PrintCustomerInfo(gameResponse.Map)}"
+            );
             // PrintCustomers(gameResponse, i);
 
             // If we are, we save the current ticks in the list of good ticks
@@ -75,7 +91,7 @@ public class Program
             {
                 MapName = mapName,
                 PlayToTick = i + 1,
-                Ticks = [.. goodTicks, currentTick]
+                Ticks = [.. goodTicks, currentTick],
             };
         }
 
@@ -83,7 +99,9 @@ public class Program
         {
             input.PlayToTick = null;
             var serverResponse = await remoteClient.PostGame(input);
-            Console.WriteLine($"Remote server response: {serverResponse.GameId} Score {serverResponse.CustomerCompletionScore} + {serverResponse.KwhRevenue} = {serverResponse.Score}");
+            Console.WriteLine(
+                $"Remote server response: {serverResponse.GameId} Score {serverResponse.CustomerCompletionScore} + {serverResponse.KwhRevenue} = {serverResponse.Score}"
+            );
         }
     }
 
@@ -111,9 +129,11 @@ public class Program
         if (!string.IsNullOrEmpty(filter))
             filtered = filtered.Where(f => f.Customer.Id == filter).ToArray();
 
-        foreach (var item in filtered)//.Where(x => x.Customer.Id == "0.7"))
+        foreach (var item in filtered) //.Where(x => x.Customer.Id == "0.7"))
         {
-            Console.WriteLine($"Tick:{tick,-4}Id {item.Customer.Id,-10}State: {item.Customer.State,-20}At:{item.At,-10}Charge {item.Customer.ChargeRemaining}");
+            Console.WriteLine(
+                $"Tick:{tick, -4}Id {item.Customer.Id, -10}State: {item.Customer.State, -20}At:{item.At, -10}Charge {item.Customer.ChargeRemaining}"
+            );
         }
     }
 
@@ -125,18 +145,22 @@ public class Program
             return new TickDto
             {
                 Tick = tick,
-                CustomerRecommendations = new List<CustomerRecommendationDto>()
+                CustomerRecommendations = new List<CustomerRecommendationDto>(),
             };
         }
 
         return new TickDto
         {
             Tick = tick,
-            CustomerRecommendations = GenerateCustomerRecommendations(map, tick, rec)
+            CustomerRecommendations = GenerateCustomerRecommendations(map, tick, rec),
         };
     }
 
-    static List<CustomerRecommendationDto> GenerateCustomerRecommendations(MapDto map, int _currentTick, Recommendations rec)
+    static List<CustomerRecommendationDto> GenerateCustomerRecommendations(
+        MapDto map,
+        int _currentTick,
+        Recommendations rec
+    )
     {
         var customerRecommendations = new List<CustomerRecommendationDto>();
 
@@ -175,8 +199,12 @@ public class Program
         return $"Count: {customers.Count} Ran out: {customers.Count(c => c.State == CustomerState.RanOutOfJuice)} Reached: {customers.Count(c => c.State == CustomerState.DestinationReached)}";
     }
 
-
-    static void AddRecommendation(List<CustomerRecommendationDto> customerRecommendations, NodeDto atNode, CustomerDto customer, Recommendations rec)
+    static void AddRecommendation(
+        List<CustomerRecommendationDto> customerRecommendations,
+        NodeDto atNode,
+        CustomerDto customer,
+        Recommendations rec
+    )
     {
         var chargeTo = 1f;
         var station = atNode.Target as ChargingStationDto;
@@ -203,7 +231,7 @@ public class Program
 
         // Select if we should charge at this node or the next.
 
-        chargeTo = 1f;// (neededEnergyToGoal / customer.MaxCharge) * 1.2f;
+        chargeTo = 1f; // (neededEnergyToGoal / customer.MaxCharge) * 1.2f;
 
         if (customer.ChargeRemaining > ConfigParams.SkipChargeLimit)
             return;
@@ -215,24 +243,27 @@ public class Program
         if (chargeTo > 1)
             chargeTo = 1;
 
-        customerRecommendations.Add(new CustomerRecommendationDto
-        {
-            CustomerId = customer.Id,
-            ChargingRecommendations = new List<ChargingRecommendationDto>
+        customerRecommendations.Add(
+            new CustomerRecommendationDto
+            {
+                CustomerId = customer.Id,
+                ChargingRecommendations = new List<ChargingRecommendationDto>
                 {
-                    new ChargingRecommendationDto
-                    {
-                        NodeId = atNode.Id,
-                        ChargeTo = chargeTo
-                    }
-                }
-        });
+                    new ChargingRecommendationDto { NodeId = atNode.Id, ChargeTo = chargeTo },
+                },
+            }
+        );
 
         //Console.WriteLine($"Recommending charge to {chargeTo} at station {chargingNode.Id}");
-
     }
 
-    static void AddRerouteIfNeeded(CustomerDto customer, NodeDto atNode, Recommendations rec, List<CustomerRecommendationDto> customerRecommendations, MapDto map)
+    static void AddRerouteIfNeeded(
+        CustomerDto customer,
+        NodeDto atNode,
+        Recommendations rec,
+        List<CustomerRecommendationDto> customerRecommendations,
+        MapDto map
+    )
     {
         var path = rec.DijkstraPath(atNode.Id, customer.ToNode);
         var dis = rec.PathDistance(path, atNode.Id, customer.ToNode);
@@ -244,7 +275,11 @@ public class Program
         {
             var node = map.Nodes.Single(n => n.Id == nodeId);
             var station = node.Target as ChargingStationDto;
-            if (station != null && station.TotalAmountOfChargers - station.TotalAmountOfBrokenChargers > 0) return;
+            if (
+                station != null
+                && station.TotalAmountOfChargers - station.TotalAmountOfBrokenChargers > 0
+            )
+                return;
             // also filter out if there is no power in that zone
         }
 
@@ -276,19 +311,18 @@ public class Program
                 bestStation = toStation;
             }
         }
-        if (bestStation == null) return;
-        customerRecommendations.Add(new CustomerRecommendationDto
-        {
-            CustomerId = customer.Id,
-            ChargingRecommendations = new List<ChargingRecommendationDto>
-        {
-            new ChargingRecommendationDto
+        if (bestStation == null)
+            return;
+        customerRecommendations.Add(
+            new CustomerRecommendationDto
             {
-                ChargeTo = 1,
-                NodeId = bestStation.Id,
+                CustomerId = customer.Id,
+                ChargingRecommendations = new List<ChargingRecommendationDto>
+                {
+                    new ChargingRecommendationDto { ChargeTo = 1, NodeId = bestStation.Id },
+                },
             }
-        }
-        });
+        );
         //Console.WriteLine($"Re-route {customer.Id} to {bestStation.Id}");
     }
 }
