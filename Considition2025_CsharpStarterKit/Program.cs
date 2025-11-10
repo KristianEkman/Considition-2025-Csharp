@@ -78,7 +78,7 @@ public class Program
             Console.WriteLine(
                 $"Tick {i} Score: {gameResponse.CustomerCompletionScore} + {gameResponse.KwhRevenue} = {finalScore} {PrintCustomerInfo(gameResponse.Map)}"
             );
-            // PrintCustomers(gameResponse, i);
+            //PrintCustomers(gameResponse, i, "0.7");
 
             // If we are, we save the current ticks in the list of good ticks
             goodTicks.Add(currentTick);
@@ -296,6 +296,16 @@ public class Program
                 continue;
             }
 
+            //Is energy enough to reach this station?
+            var p = rec.DijkstraPath(atNode.Id, toStation.Id);
+            var d = rec.PathDistance(p, atNode.Id, toStation.Id);
+            var needed = d * customer.EnergyConsumptionPerKm;
+            var actual = customer.ChargeRemaining * customer.MaxCharge;
+            if (actual < needed)
+            {
+                continue;
+            }
+
             // Can this station reach the goal?
             var toGoalPAth = rec.DijkstraPath(toStation.Id, customer.ToNode);
             if (toGoalPAth == null || !toGoalPAth.Any())
@@ -313,6 +323,7 @@ public class Program
         }
         if (bestStation == null)
             return;
+
         customerRecommendations.Add(
             new CustomerRecommendationDto
             {

@@ -25,7 +25,6 @@ public class ConsiditionClient
             throw new Exception(text);
         }
 
-
         return await response.Content.ReadFromJsonAsync<GameResponseDto>();
     }
 
@@ -33,4 +32,9 @@ public class ConsiditionClient
     {
         return await client.GetFromJsonAsync<MapDto>($"api/map?mapName={_mapName}");
     }
+
+    //public async Task<GameResponseDto> PostOwnConfig(GameInputAndMapConfigDto config)
+    //{
+    //    return await client.GetFromJsonAsync<List<MapDto>>("api/map/all");
+    //}
 }
