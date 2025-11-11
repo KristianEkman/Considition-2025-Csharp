@@ -8,12 +8,18 @@ class Recommendations
         Map = map;
     }
 
+    public void SetGameResponse(GameResponseDto gr)
+    {
+        GameResponse = gr;
+    }
+
     private Dictionary<string, List<(string to, float w)>> Adjacency { get; set; }
     public MapDto Map { get; private set; }
     private Dictionary<(string start, string goal), List<string>> PathCache { get; set; } = new();
 
-    public Dictionary<string, (string? fromNode, string? toNode, float chargeAtStart, float? batteryPtcPerKm)> Consumption { get; } = new();
+    public Dictionary<string, ConsumptionRec> Consumption { get; set; } = new();
     public List<string> HasCharged { get; } = new();
+    public GameResponseDto GameResponse { get; private set; }
 
     public void BuildAdjacency(MapDto map)
     {

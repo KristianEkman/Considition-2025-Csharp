@@ -146,16 +146,19 @@ public record NodeDto
     public required List<CustomerDto> Customers { get; init; }
     public required TargetDto? Target { get; init; }
 
-    internal float GetScore(List<ZoneDto> zones)
+    internal float GetScore(GameResponseDto gameResponse)
     {
         var station = Target as ChargingStationDto;
-        if (station != null)
+        if (station == null)
             return 0;
 
-        var zone = zones.Single(z => z.Id == ZoneId);
-        var capacity = zone.EnergySources.Sum(s => s.GenerationCapacity);
-        // var x = zone.EnergyStorages.Sum(s => s.)
+        var zone = gameResponse.ZoneLogs.Last().Zones.Single(z => z.ZoneId == ZoneId);
 
+        var price = zone.Sourceinfo.Average(s => s.Value.PricePerMWh);
+        //zone.StorageInfo.Sum(z => z.)
+        if (zone.TotalProduction - zone.TotalDemand < 0)
+            return 0;
+                
         var score = station.AmountOfAvailableChargers * station.ChargeSpeedPerCharger;
         return score;
     }
