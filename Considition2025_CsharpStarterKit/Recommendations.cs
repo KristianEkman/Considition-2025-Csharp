@@ -12,6 +12,9 @@ class Recommendations
     public MapDto Map { get; private set; }
     private Dictionary<(string start, string goal), List<string>> PathCache { get; set; } = new();
 
+    public Dictionary<string, (string? fromNode, string? toNode, float chargeAtStart, float? batteryPtcPerKm)> Consumption { get; } = new();
+    public List<string> HasCharged { get; } = new();
+
     public void BuildAdjacency(MapDto map)
     {
         var adj = new Dictionary<string, List<(string to, float w)>>();
@@ -129,7 +132,8 @@ class Recommendations
 
     internal bool IsGreen(NodeDto chargingNode)
     {
-        var station = (ChargingStationDto)chargingNode.Target;
+        var station = chargingNode.Target as ChargingStationDto;
+        if (station == null) return false;
         var zone = Map.Zones.Single(z => chargingNode.ZoneId == z.Id);
         if (zone == null) return false;
         var good = new[] { "Hydro", "Solar", "Wind" };

@@ -8,6 +8,7 @@ public record CustomerRecommendationDto
     override public string ToString()
     {
         var stringBuilder = new System.Text.StringBuilder();
+        stringBuilder.Append(CustomerId);
         foreach (var recommendation in ChargingRecommendations)
         {
             stringBuilder.AppendLine("  Node: " + recommendation.NodeId + " ChargeTo: " + recommendation.ChargeTo);

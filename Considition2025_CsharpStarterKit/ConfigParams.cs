@@ -8,7 +8,7 @@ namespace Considition2025_CsharpStarterKit;
 
 internal static class ConfigParams
 {
-    public static float SkipChargeLimit { get; set; } = 0.47f;
+    public static float SkipChargeLimit { get; set; } = 0.95f;
 
     public static bool SaveToServer { get; set; } = false;
 

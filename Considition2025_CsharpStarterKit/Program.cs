@@ -26,7 +26,8 @@ public class Program
             }
         );
 
-        var mapName = ConfigParams.MapName != "" ? ConfigParams.MapName : "Turbohill";
+        // "Turbohill" "Clutchfield"
+        var mapName = ConfigParams.MapName != "" ? ConfigParams.MapName : "Clutchfield";
         ConfigParams.MapName = mapName;
         var map = await client.GetMap(mapName);
         Recommendations rec = new Recommendations();
@@ -83,6 +84,8 @@ public class Program
             // If we are, we save the current ticks in the list of good ticks
             goodTicks.Add(currentTick);
 
+            UpdateConsumption(gameResponse, rec);
+
             // Generate new tick for next iteration
             currentTick = GenerateTick(gameResponse.Map, i + 1, rec);
 
@@ -132,7 +135,7 @@ public class Program
         foreach (var item in filtered) //.Where(x => x.Customer.Id == "0.7"))
         {
             Console.WriteLine(
-                $"Tick:{tick, -4}Id {item.Customer.Id, -10}State: {item.Customer.State, -20}At:{item.At, -10}Charge {item.Customer.ChargeRemaining}"
+                $"Tick:{tick,-4}Id {item.Customer.Id,-10}State: {item.Customer.State,-20}At:{item.At,-20}Charge {item.Customer.ChargeRemaining}"
             );
         }
     }
@@ -334,6 +337,40 @@ public class Program
                 },
             }
         );
-        //Console.WriteLine($"Re-route {customer.Id} to {bestStation.Id}");
+        //Console.WriteLine($"Route {customer.Id} to {bestStation.Id}");
+    }
+
+    private static void UpdateConsumption(GameResponseDto gameResponse, Recommendations rec)
+    {
+        var customers = gameResponse.Map.Edges.SelectMany(e => e.Customers);
+        foreach (var edge in gameResponse.Map.Edges)
+        {
+            foreach (var customer in edge.Customers)
+            {
+                if (customer.State == CustomerState.Traveling)
+                {
+                    if (!rec.Consumption.ContainsKey(customer.Id))
+                    {
+                        // Adding Entry for first time
+                        rec.Consumption[customer.Id] = (edge.FromNode, edge.ToNode, customer.ChargeRemaining, null);
+    }
+}
+
+                if (customer.State == CustomerState.TransitioningToNode)
+                {
+                    var consumption = rec.Consumption[customer.Id];
+                    if (consumption.batteryPtcPerKm == null)
+                    {
+                        var path = rec.DijkstraPath(edge.FromNode, edge.ToNode);
+                        var distance = rec.PathDistance(path, edge.FromNode, edge.ToNode);
+                        var chargeAtStart = consumption.chargeAtStart;
+                        var charge = customer.ChargeRemaining;
+                        var ptcPerKm = (chargeAtStart - charge) / distance;
+                        rec.Consumption[customer.Id] = (edge.FromNode, edge.ToNode, chargeAtStart, ptcPerKm);
+                        // Console.WriteLine($"{customer.Persona} {customer.Type} {ptcPerKm}");
+                    }
+                }
+            }
+        }
     }
 }
