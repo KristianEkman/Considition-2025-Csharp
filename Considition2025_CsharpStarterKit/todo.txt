@@ -2,6 +2,8 @@
 Personas
 EcoConscious 
 
+Optimize to charge to even tick.
+
 When charging (for low energy maps)
 	- calc min level to reach
 	- then set a value to charge to depenging on config
