@@ -257,12 +257,20 @@ public class Program
             //Is energy enough to reach this station?
             var p = rec.DijkstraPath(atNode.Id, toStation.Id);
             var d = rec.PathDistance(p, atNode.Id, toStation.Id);
+            
+            // This faulty calulation is aparently needed
             var needed = d * customer.EnergyConsumptionPerKm;
             var actual = customer.ChargeRemaining * customer.MaxCharge;
             if (actual < needed)
             {
                 continue;
             }
+
+            //var neededCharge = d * consumption.batteryPtcPerKm + 0.1;
+            //if (customer.ChargeRemaining < neededCharge)
+            //{
+            //    continue;
+            //}
 
             // Can this station reach the goal?
             var toGoalPAth = rec.DijkstraPath(toStation.Id, customer.ToNode);

@@ -154,12 +154,14 @@ public record NodeDto
 
         var zone = gameResponse.ZoneLogs.Last().Zones.Single(z => z.ZoneId == ZoneId);
 
-        var price = zone.Sourceinfo.Average(s => s.Value.PricePerMWh);
+        //var price = zone.Sourceinfo.Average(s => s.Value.PricePerMWh);
         //zone.StorageInfo.Sum(z => z.)
         if (zone.TotalProduction - zone.TotalDemand < 0)
             return 0;
                 
-        var score = station.AmountOfAvailableChargers * station.ChargeSpeedPerCharger;
+        //var score = station.AmountOfAvailableChargers * station.ChargeSpeedPerCharger;
+        var score = (station.TotalAmountOfChargers - station.TotalAmountOfBrokenChargers) * station.ChargeSpeedPerCharger;
+
         return score;
     }
 }
