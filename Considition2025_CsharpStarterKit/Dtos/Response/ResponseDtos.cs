@@ -146,7 +146,7 @@ public record NodeDto
     public required List<CustomerDto> Customers { get; init; }
     public required TargetDto? Target { get; init; }
 
-    internal float GetScore(GameResponseDto gameResponse)
+    internal float GetScore(GameResponseDto gameResponse, string persona)
     {
         var station = Target as ChargingStationDto;
         if (station == null)
@@ -154,13 +154,26 @@ public record NodeDto
 
         var zone = gameResponse.ZoneLogs.Last().Zones.Single(z => z.ZoneId == ZoneId);
 
-        //var price = zone.Sourceinfo.Average(s => s.Value.PricePerMWh);
         //zone.StorageInfo.Sum(z => z.)
+        
         if (zone.TotalProduction - zone.TotalDemand < 0)
-            return 0;
-                
+            return 0;        
+        
         //var score = station.AmountOfAvailableChargers * station.ChargeSpeedPerCharger;
         var score = (station.TotalAmountOfChargers - station.TotalAmountOfBrokenChargers) * station.ChargeSpeedPerCharger;
+
+
+        var green = zone.StorageInfo != null && zone.StorageInfo.Any() ? zone.StorageInfo.Select(s => s.StoredGreenPercent).Average() : 0;
+        if (persona == "EcoConscious")
+        {
+            score *= (1 + (green / 100f));
+        }
+
+        var price = zone.Sourceinfo.Any() ? zone.Sourceinfo.Select(s => s.Value.PricePerMWh).Average() : 0;
+        if (persona == "CostSensitive")
+        {
+            score *= (1 + (price / 100f));
+        }
 
         return score;
     }

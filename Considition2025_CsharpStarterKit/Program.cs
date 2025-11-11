@@ -34,7 +34,7 @@ public class Program
         ConfigParams.MapName = mapName;
         var map = await client.GetMap(mapName);
         Recommendations rec = new Recommendations();
-        
+
         rec.SetMap(map);
         rec.BuildAdjacency(map);
 
@@ -188,7 +188,7 @@ public class Program
                 AddRerouteIfNeeded(customer, node, rec, customerRecommendations, map);
             }
         }
-       
+
         return customerRecommendations;
     }
 
@@ -210,7 +210,7 @@ public class Program
     )
     {
         ConsumptionRec consumption;
-        var guessed = customer.Type == "Truck" ? 0.1f : customer.Type == "Car" ? 0.004f: 0.003f;
+        var guessed = customer.Type == "Truck" ? 0.1f : customer.Type == "Car" ? 0.004f : 0.003f;
         if (!rec.Consumption.ContainsKey(customer.Id))
         {
             consumption = new ConsumptionRec("", "", 0, guessed);
@@ -233,13 +233,13 @@ public class Program
         if (customer.ChargeRemaining > ConfigParams.SkipChargeLimit)
             return;
 
+        // Customer wants to reach its destination
         var path = rec.DijkstraPath(atNode.Id, customer.ToNode);
         var dis = rec.PathDistance(path, atNode.Id, customer.ToNode);
         var batteryCharge = dis * consumption.batteryPtcPerKm + 0.1;
-
         if (customer.ChargeRemaining > batteryCharge)
             return;
-                
+
         // No good station found on path
         var allStations = map.Nodes.Where(n => n.Target is ChargingStationDto).ToList();
         var nearestDistance = float.MaxValue;
@@ -257,7 +257,7 @@ public class Program
             //Is energy enough to reach this station?
             var p = rec.DijkstraPath(atNode.Id, toStation.Id);
             var d = rec.PathDistance(p, atNode.Id, toStation.Id);
-            
+
             // This faulty calulation is aparently needed
             var needed = d * customer.EnergyConsumptionPerKm;
             var actual = customer.ChargeRemaining * customer.MaxCharge;
@@ -265,34 +265,15 @@ public class Program
             {
                 continue;
             }
+                    
 
-            //var neededCharge = d * consumption.batteryPtcPerKm + 0.1;
-            //if (customer.ChargeRemaining < neededCharge)
-            //{
-            //    continue;
-            //}
-
-            // Can this station reach the goal?
-            var toGoalPAth = rec.DijkstraPath(toStation.Id, customer.ToNode);
-            if (toGoalPAth == null || !toGoalPAth.Any())
-            {
-                continue;
-            }
-
-            //toStationPath.AddRange(toGoalPAth.Skip(1));
-            //var dist = rec.PathDistance(toStationPath, atNode.Id, toStation.Id);
-            //if (dist < nearestDistance)
-            //{
-            //    nearestDistance = dist;
-            //    bestStation = toStation;
-            //}
-
-            var stationScore = toStation.GetScore(rec.GameResponse);
+            var stationScore = toStation.GetScore(rec.GameResponse, customer.Persona);
             if (stationScore > bestStationScore)
             {
                 bestStationScore = stationScore;
                 bestStation = toStation;
             }
+
         }
 
         if (bestStation == null)
@@ -301,13 +282,15 @@ public class Program
             return;
         }
 
+        var chargeTo = 1f; // CalculateChargeTo(atNode, customer);
+
         customerRecommendations.Add(
             new CustomerRecommendationDto
             {
                 CustomerId = customer.Id,
                 ChargingRecommendations = new List<ChargingRecommendationDto>
                 {
-                    new ChargingRecommendationDto { ChargeTo = 1, NodeId = bestStation.Id },
+                    new ChargingRecommendationDto { ChargeTo = chargeTo, NodeId = bestStation.Id },
                 },
             }
         );
