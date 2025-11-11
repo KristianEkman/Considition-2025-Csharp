@@ -145,6 +145,20 @@ public record NodeDto
     public required string? ZoneId { get; init; }
     public required List<CustomerDto> Customers { get; init; }
     public required TargetDto? Target { get; init; }
+
+    internal float GetScore(List<ZoneDto> zones)
+    {
+        var station = Target as ChargingStationDto;
+        if (station != null)
+            return 0;
+
+        var zone = zones.Single(z => z.Id == ZoneId);
+        var capacity = zone.EnergySources.Sum(s => s.GenerationCapacity);
+        // var x = zone.EnergyStorages.Sum(s => s.)
+
+        var score = station.AmountOfAvailableChargers * station.ChargeSpeedPerCharger;
+        return score;
+    }
 }
 
 public record NullTargetDto : TargetDto

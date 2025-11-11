@@ -2,6 +2,8 @@
 Personas
 EcoConscious 
 
+Route to places where charging is good.
+
 Optimize to charge to even tick.
 
 When charging (for low energy maps)

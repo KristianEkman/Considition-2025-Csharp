@@ -221,6 +221,10 @@ public class Program
             return;
         }
 
+        if (customer.State == CustomerState.WaitingForCharger)
+        {
+            //return;
+        }
         //var path = rec.DijkstraPath(atNode.Id, customer.ToNode); // this could be done once
         //var nextStation = rec.FindNextChargingStationAfter(path, chargingNode.Id);
         //var distanceToGoal = rec.PathDistance(path, atNode.Id, customer.ToNode);
@@ -268,6 +272,10 @@ public class Program
         MapDto map
     )
     {
+        //if (!rec.Consumption.ContainsKey(customer.Id))
+        //    return;
+
+        //var consumption = rec.Consumption[customer.Id];
         var path = rec.DijkstraPath(atNode.Id, customer.ToNode);
         var dis = rec.PathDistance(path, atNode.Id, customer.ToNode);
         var energy = dis * customer.EnergyConsumptionPerKm;
@@ -323,9 +331,18 @@ public class Program
                 nearestDistance = dist;
                 bestStation = toStation;
             }
+            //var stationScore = toStation.GetScore(rec.Map.Zones);
+            //if (stationScore > bestStationScore)
+            //{
+            //    bestStationScore = stationScore;
+            //    bestStation = toStation;
+            //}
         }
         if (bestStation == null)
+        {
+            //Console.WriteLine($"Found no station to route to. {customer.Id} at node {atNode.Id} ");
             return;
+        }
 
         customerRecommendations.Add(
             new CustomerRecommendationDto
