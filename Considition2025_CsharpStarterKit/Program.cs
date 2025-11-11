@@ -199,8 +199,6 @@ public class Program
         customers.AddRange(map.Nodes.SelectMany(n => n.Customers));
         return $"Count: {customers.Count} Ran out: {customers.Count(c => c.State == CustomerState.RanOutOfJuice)} Reached: {customers.Count(c => c.State == CustomerState.DestinationReached)}";
     }
-
-
     static void AddRerouteIfNeeded(
         CustomerDto customer,
         NodeDto atNode,
@@ -227,6 +225,12 @@ public class Program
         if (customer.State == CustomerState.WaitingForCharger)
             return;
 
+        if (customer.State == CustomerState.RanOutOfJuice )
+            return;
+
+        if (customer.State == CustomerState.DestinationReached)
+            return;
+
         if (customerRecommendations.Any(c => c.CustomerId == customer.Id))
             return;
 
@@ -239,8 +243,7 @@ public class Program
         var batteryCharge = dis * consumption.batteryPtcPerKm + 0.1;
         if (customer.ChargeRemaining > batteryCharge)
             return;
-
-        // No good station found on path
+                
         var allStations = map.Nodes.Where(n => n.Target is ChargingStationDto).ToList();
         var nearestDistance = float.MaxValue;
         NodeDto bestStation = null;
@@ -264,8 +267,7 @@ public class Program
             if (actual < needed)
             {
                 continue;
-            }
-                    
+            }                    
 
             var stationScore = toStation.GetScore(rec.GameResponse, customer.Persona);
             if (stationScore > bestStationScore)
@@ -273,7 +275,6 @@ public class Program
                 bestStationScore = stationScore;
                 bestStation = toStation;
             }
-
         }
 
         if (bestStation == null)
