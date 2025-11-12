@@ -29,9 +29,20 @@ public class Program
             }
         );
 
+
         // "Turbohill" "Clutchfield"
         var mapName = ConfigParams.MapName != "" ? ConfigParams.MapName : "Clutchfield";
         ConfigParams.MapName = mapName;
+        // client.SaveGetMapConfig(mapName);
+        await client.PostOwnConfig(new GameInputAndMapConfigDto
+        {
+            GameInput = new GameInputDto
+            {
+                MapName = mapName,
+                Ticks = [],
+            },
+        });
+        return;
         var map = await client.GetMap(mapName);
         Recommendations rec = new Recommendations();
 

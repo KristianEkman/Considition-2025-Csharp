@@ -92,3 +92,16 @@ Final Score: 1922 + 4418 = 6340 Count: 58 Ran out: 6 Reached: 39
 2025-11-12 04:27:34
 Map: Turbohill SkipChargeLimit: 1 Save: False
 Final Score: 1956 + 4366 = 6322 Count: 53 Ran out: 7 Reached: 33
+
+----------------
+2025-11-12 09:03:30
+Map: Turbohill SkipChargeLimit: 0,95 Save: False
+Final Score: 1922 + 4418 = 6340 Count: 58 Ran out: 6 Reached: 39
+
+----------------
+2025-11-12 09:11:45
+Map: Turbohill SkipChargeLimit: 0,95 Save: False
+
+----------------
+2025-11-12 09:12:55
+Map: Turbohill-c-1 SkipChargeLimit: 0,95 Save: False

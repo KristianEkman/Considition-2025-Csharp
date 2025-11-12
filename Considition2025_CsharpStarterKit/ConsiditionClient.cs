@@ -33,8 +33,17 @@ public class ConsiditionClient
         return await client.GetFromJsonAsync<MapDto>($"api/map?mapName={_mapName}");
     }
 
+    public async void SaveGetMapConfig(string _mapName)
+    {
+        var response = await client.GetFromJsonAsync<MapConfigDto>($"api/map?mapName={_mapName}");
+        var text = System.Text.Json.JsonSerializer.Serialize(response);
+        File.WriteAllText($"map-config-{_mapName}.json", text);
+    }
+
     public async Task<GameResponseDto> PostOwnConfig(GameInputAndMapConfigDto config)
     {
+        var mapConfigDto = File.ReadAllText($"map-config-{config.GameInput.MapName}.json");
+        config.MapConfig = System.Text.Json.JsonSerializer.Deserialize<MapConfigDto>(mapConfigDto);
         var response = await client.PostAsJsonAsync("/api/game-with-custom-map", config);
         if (!response.IsSuccessStatusCode)
         {
