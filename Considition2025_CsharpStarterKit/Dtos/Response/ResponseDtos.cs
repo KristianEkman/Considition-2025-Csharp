@@ -153,11 +153,12 @@ public record NodeDto
             return 0;
 
         var zone = gameResponse.ZoneLogs.Last().Zones.Single(z => z.ZoneId == ZoneId);
-
-        //zone.StorageInfo.Sum(z => z.)
         
         if (zone.TotalProduction - zone.TotalDemand < 0)
-            return 0;        
+            return 0;
+
+        //if (zone.TotalProduction - zone.TotalDemand < 0)
+        //    return 1;        
         
         //var score = station.AmountOfAvailableChargers * station.ChargeSpeedPerCharger;
         var score = (station.TotalAmountOfChargers - station.TotalAmountOfBrokenChargers) * station.ChargeSpeedPerCharger;
