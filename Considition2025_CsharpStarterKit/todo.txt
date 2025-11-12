@@ -1,8 +1,10 @@
-﻿make sure charged before going to destination
-
-Personas
+﻿Personas
+	- stressed, select fastest charger
 
 Route to places where charging is good.
+
+Check why the fault enegy exit is needed.
+- download config and look at one car
 
 Optimize to charge to even tick.
 

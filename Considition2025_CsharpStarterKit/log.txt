@@ -43,3 +43,52 @@ Final Score: 7410 + 28664 = 36074 Count: 276 Ran out: 67 Reached: 126
 2025-11-12 04:19:10
 Map: Clutchfield SkipChargeLimit: 0,95 Save: True
 Final Score: 7410 + 28664 = 36074 Count: 276 Ran out: 67 Reached: 126
+
+----------------
+2025-11-12 04:23:41
+Map: Turbohill SkipChargeLimit: 0,95 Save: False
+Final Score: 120 + 583 = 703 Count: 22 Ran out: 20 Reached: 2
+
+----------------
+2025-11-12 04:23:54
+Map: Clutchfield SkipChargeLimit: 0,95 Save: False
+
+----------------
+2025-11-12 04:25:33
+Map: Turbohill SkipChargeLimit: 0,47 Save: False
+Final Score: 2046 + 2971 = 5017 Count: 58 Ran out: 4 Reached: 38
+
+----------------
+2025-11-12 04:25:48
+Map: Turbohill SkipChargeLimit: 0,95 Save: False
+Final Score: 1922 + 4418 = 6340 Count: 58 Ran out: 6 Reached: 39
+
+----------------
+2025-11-12 04:26:19
+Map: Turbohill SkipChargeLimit: 0,94 Save: False
+Final Score: 1812 + 4247 = 6059 Count: 56 Ran out: 6 Reached: 36
+
+----------------
+2025-11-12 04:26:33
+Map: Turbohill SkipChargeLimit: 0,96 Save: False
+Final Score: 1922 + 4418 = 6340 Count: 58 Ran out: 6 Reached: 39
+
+----------------
+2025-11-12 04:26:53
+Map: Turbohill SkipChargeLimit: 0,97 Save: False
+Final Score: 1922 + 4418 = 6340 Count: 58 Ran out: 6 Reached: 39
+
+----------------
+2025-11-12 04:27:06
+Map: Turbohill SkipChargeLimit: 0,98 Save: False
+Final Score: 1922 + 4418 = 6340 Count: 58 Ran out: 6 Reached: 39
+
+----------------
+2025-11-12 04:27:20
+Map: Turbohill SkipChargeLimit: 0,99 Save: False
+Final Score: 1922 + 4418 = 6340 Count: 58 Ran out: 6 Reached: 39
+
+----------------
+2025-11-12 04:27:34
+Map: Turbohill SkipChargeLimit: 1 Save: False
+Final Score: 1956 + 4366 = 6322 Count: 53 Ran out: 7 Reached: 33
