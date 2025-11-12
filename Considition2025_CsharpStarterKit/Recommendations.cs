@@ -1,4 +1,5 @@
-﻿using Considition2025_CsharpStarterKit.Dtos.Request;
+﻿using Considition2025_CsharpStarterKit;
+using Considition2025_CsharpStarterKit.Dtos.Request;
 using Considition2025_CsharpStarterKit.Dtos.Response;
 
 class Recommendations
@@ -6,12 +7,23 @@ class Recommendations
     public void SetMap(MapDto map)
     {
         Map = map;
+
+        var stations = map.Nodes.Where(n => n.Target is ChargingStationDto);
+        var dict = new List<(string, int)>();
+        foreach (var station in stations) { 
+            var charger = (ChargingStationDto)station.Target;
+            var item = (station.Id,  charger.TotalAmountOfChargers - charger.TotalAmountOfBrokenChargers);
+            dict.Add(item);
+        }
+        StationSchedule = new StationSchedule(dict.ToDictionary());
     }
 
     public void SetGameResponse(GameResponseDto gr)
     {
         GameResponse = gr;
     }
+
+    public StationSchedule StationSchedule { get; private set; }
 
     private Dictionary<string, List<(string to, float w)>> Adjacency { get; set; }
     public MapDto Map { get; private set; }
@@ -88,24 +100,6 @@ class Recommendations
         return path;
     }
 
-    public string FindNextChargingStationAfter(List<string> path, string startNodeId)
-    {
-        // Find first station appearing AFTER startNodeId in the path
-        var nodesById = Map.Nodes.ToDictionary(n => n.Id);
-        var seenStart = false;
-        foreach (var nodeId in path)
-        {
-            if (!seenStart)
-            {
-                if (nodeId == startNodeId) seenStart = true;
-                continue;
-            }
-            var n = nodesById[nodeId];
-            if (n.Target is ChargingStationDto) return nodeId;
-        }
-        return path.Last();
-    }
-
     public float PathDistance(List<string> path, string fromNodeId, string toNodeId)
     {
         var total = 0f;
@@ -126,23 +120,4 @@ class Recommendations
         return total;
     }
 
-    public static float SafeChargeTargetFraction(float neededEnergy, float maxEnergy, float currentEnergy, float bufferFraction)
-    {
-        if (maxEnergy <= 0) return 1f;
-        var frac = neededEnergy / maxEnergy;
-        frac *= (1f + bufferFraction);
-        var currentFrac = currentEnergy / maxEnergy;
-        var target = MathF.Max(frac, currentFrac);
-        return MathF.Min(1f, MathF.Max(0f, target));
-    }
-
-    internal bool IsGreen(NodeDto chargingNode)
-    {
-        var station = chargingNode.Target as ChargingStationDto;
-        if (station == null) return false;
-        var zone = Map.Zones.Single(z => chargingNode.ZoneId == z.Id);
-        if (zone == null) return false;
-        var good = new[] { "Hydro", "Solar", "Wind" };
-        return zone.EnergySources.Any(e => good.Contains(e.Type));
-    }
 }

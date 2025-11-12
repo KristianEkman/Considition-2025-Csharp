@@ -29,20 +29,9 @@ public class Program
             }
         );
 
-
         // "Turbohill" "Clutchfield" "Batterytown"
         var mapName = ConfigParams.MapName != "" ? ConfigParams.MapName : "Clutchfield";
         ConfigParams.MapName = mapName;
-        // client.SaveGetMapConfig(mapName);
-        //await client.PostOwnConfig(new GameInputAndMapConfigDto
-        //{
-        //    GameInput = new GameInputDto
-        //    {
-        //        MapName = mapName,
-        //        Ticks = [],
-        //    },
-        //});
-        //return;
 
         var map = await client.GetMap(mapName);
         Recommendations rec = new Recommendations();
@@ -119,9 +108,9 @@ public class Program
         {
             input.PlayToTick = null;
             var serverResponse = await remoteClient.PostGame(input);
-            Console.WriteLine(
-                $"Remote server response: {serverResponse.GameId} Score {serverResponse.CustomerCompletionScore} + {serverResponse.KwhRevenue} = {serverResponse.Score}"
-            );
+            var text = $"{mapName} {serverResponse.GameId} Score {serverResponse.CustomerCompletionScore} + {serverResponse.KwhRevenue} = {serverResponse.Score}";
+            File.AppendAllLines("log.txt", [text]);
+            Console.WriteLine(text);
         }
     }
 
@@ -178,7 +167,7 @@ public class Program
 
     static List<CustomerRecommendationDto> GenerateCustomerRecommendations(
         MapDto map,
-        int _currentTick,
+        int tick,
         Recommendations rec
     )
     {
@@ -188,7 +177,7 @@ public class Program
         {
             foreach (var customer in node.Customers)
             {
-                AddRerouteIfNeeded(customer, node, rec, customerRecommendations, map);
+                AddRerouteIfNeeded(customer, node, rec, customerRecommendations, map, tick);
             }
         }
 
@@ -197,7 +186,7 @@ public class Program
             var node = map.Nodes.Single(n => n.Id == edge.ToNode);
             foreach (var customer in edge.Customers)
             {
-                AddRerouteIfNeeded(customer, node, rec, customerRecommendations, map);
+                AddRerouteIfNeeded(customer, node, rec, customerRecommendations, map, tick);
             }
         }
 
@@ -216,7 +205,8 @@ public class Program
         NodeDto atNode,
         Recommendations rec,
         List<CustomerRecommendationDto> customerRecommendations,
-        MapDto map
+        MapDto map,
+        int tick
     )
     {
         ConsumptionRec consumption;
@@ -284,6 +274,14 @@ public class Program
                 continue;
             }
 
+            if (customer.State == CustomerState.TransitioningToNode && ConfigParams.Schedule)
+            {
+                if (!rec.StationSchedule.IsFree(toStation.Id, tick + 1, tick + 4))
+                {
+                    continue;
+                }
+            }
+
             var stationScore = toStation.GetScore(rec.GameResponse, customer.Persona);
             if (stationScore > bestStationScore)
             {
@@ -296,6 +294,14 @@ public class Program
         {
             //Console.WriteLine($"Found no station to route to. {customer.Id} at node {atNode.Id} ");
             return;
+        }
+
+        if (customer.State == CustomerState.TransitioningToNode)
+        {
+            if (!rec.StationSchedule.Reserve(bestStation.Id, tick + 1, tick + 4))
+            {
+                return;
+            }
         }
 
         var chargeTo = 1f; // CalculateChargeTo(atNode, customer);

@@ -11,6 +11,7 @@ internal static class ConfigParams
     public static float SkipChargeLimit { get; set; } = 0.95f;
 
     public static bool SaveToServer { get; set; } = false;
+    public static bool Schedule { get; set; } = false;
 
     public static string MapName { get; set; } = "";
 
@@ -19,7 +20,9 @@ internal static class ConfigParams
         if (args == null || args.Length == 0)
             return;
 
-        Console.WriteLine($"Save {SaveToServer}");
+        SaveToServer = args.Contains("save");
+        Schedule = args.Contains("schedule");
+                
         for (int i = 0; i < args.Length; i++)
         {
             switch (i)
@@ -27,10 +30,6 @@ internal static class ConfigParams
                 case 0:
                     MapName = args[i];
                     break;
-                case 1:
-                    SkipChargeLimit = float.Parse(args[i]);
-                    break;
-
                 default:
                     break;
             }
@@ -39,6 +38,6 @@ internal static class ConfigParams
 
     internal static string WriteLine()
     {
-        return $"Map: {MapName} SkipChargeLimit: {SkipChargeLimit} Save: {SaveToServer}";
+        return $"Map: {MapName} SkipChargeLimit: {SkipChargeLimit} Save: {SaveToServer} Schedule Stations: {Schedule}";
     }
 }
