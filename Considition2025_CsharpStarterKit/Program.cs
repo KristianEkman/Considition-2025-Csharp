@@ -225,7 +225,7 @@ public class Program
         if (customer.State == CustomerState.WaitingForCharger)
             return;
 
-        if (customer.State == CustomerState.RanOutOfJuice )
+        if (customer.State == CustomerState.RanOutOfJuice)
             return;
 
         if (customer.State == CustomerState.DestinationReached)
@@ -237,13 +237,16 @@ public class Program
         if (customer.ChargeRemaining > ConfigParams.SkipChargeLimit)
             return;
 
+        if (customer.State == CustomerState.Charging)
+            rec.HasCharged.Add(customer.Id);
+
         // Customer wants to reach its destination
         var path = rec.DijkstraPath(atNode.Id, customer.ToNode);
         var dis = rec.PathDistance(path, atNode.Id, customer.ToNode);
         var batteryCharge = dis * consumption.batteryPtcPerKm + 0.1;
-        if (customer.ChargeRemaining > batteryCharge)
+        if (customer.ChargeRemaining > batteryCharge && rec.HasCharged.Contains(customer.Id))
             return;
-                
+
         var allStations = map.Nodes.Where(n => n.Target is ChargingStationDto).ToList();
         var nearestDistance = float.MaxValue;
         NodeDto bestStation = null;
@@ -267,7 +270,7 @@ public class Program
             if (actual < needed)
             {
                 continue;
-            }                    
+            }
 
             var stationScore = toStation.GetScore(rec.GameResponse, customer.Persona);
             if (stationScore > bestStationScore)
