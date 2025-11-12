@@ -29,8 +29,8 @@ public class Program
             }
         );
 
-        // "Turbohill" "Clutchfield" "Batterytown"
-        var mapName = ConfigParams.MapName != "" ? ConfigParams.MapName : "Clutchfield";
+        // "Turbohill" "Clutchfield" "Batterytown" "Thunderroad"
+        var mapName = ConfigParams.MapName != "" ? ConfigParams.MapName : "Thunderroad";
         ConfigParams.MapName = mapName;
 
         var map = await client.GetMap(mapName);
@@ -77,7 +77,7 @@ public class Program
                 File.AppendAllLines(
                     "log.txt",
                     [
-                        $"Final Score: {gameResponse.CustomerCompletionScore} + {gameResponse.KwhRevenue} = {finalScore} {PrintCustomerInfo(gameResponse.Map)}",
+                        $"Final Score:{mapName} {gameResponse.CustomerCompletionScore} + {gameResponse.KwhRevenue} = {finalScore} {PrintCustomerInfo(gameResponse.Map)}",
                     ]
                 );
             }
@@ -85,7 +85,8 @@ public class Program
             Console.WriteLine(
                 $"Tick {i} Score: {gameResponse.CustomerCompletionScore} + {gameResponse.KwhRevenue} = {finalScore} {PrintCustomerInfo(gameResponse.Map)}"
             );
-            //PrintCustomers(gameResponse, i, "0.7");
+            if (ConfigParams.VerboseLog)
+                PrintCustomers(gameResponse, i);
 
             // If we are, we save the current ticks in the list of good ticks
             goodTicks.Add(currentTick);
@@ -141,7 +142,7 @@ public class Program
         foreach (var item in filtered) //.Where(x => x.Customer.Id == "0.7"))
         {
             Console.WriteLine(
-                $"Tick:{tick,-4}Id {item.Customer.Id,-10}State: {item.Customer.State,-20}At:{item.At,-20}Charge {item.Customer.ChargeRemaining}"
+                $"Tick:{tick,-4} Id {item.Customer.Id,-10} State: {item.Customer.State,-20} At:{item.At,-20} Charge {item.Customer.ChargeRemaining}"
             );
         }
     }
@@ -266,10 +267,16 @@ public class Program
             var p = rec.DijkstraPath(atNode.Id, toStation.Id);
             var d = rec.PathDistance(p, atNode.Id, toStation.Id);
 
-            // This faulty calulation is aparently needed
-            var needed = d * customer.EnergyConsumptionPerKm;
-            var actual = customer.ChargeRemaining * customer.MaxCharge;
-            if (actual < needed)
+            //This faulty calulation is aparently needed
+            //var needed = d * customer.EnergyConsumptionPerKm;
+            //var actual = customer.ChargeRemaining * customer.MaxCharge;
+            //if (actual < needed)
+            //{
+            //    continue;
+            //}
+
+            var needed = d * consumption.batteryPtcPerKm;
+            if (customer.ChargeRemaining < needed)
             {
                 continue;
             }
@@ -296,7 +303,7 @@ public class Program
             return;
         }
 
-        if (customer.State == CustomerState.TransitioningToNode)
+        if (customer.State == CustomerState.TransitioningToNode && ConfigParams.Schedule)
         {
             if (!rec.StationSchedule.Reserve(bestStation.Id, tick + 1, tick + 4))
             {
@@ -316,7 +323,8 @@ public class Program
                 },
             }
         );
-        //Console.WriteLine($"Route {customer.Id} to {bestStation.Id}");
+        if (ConfigParams.VerboseLog)
+            Console.WriteLine($"Route {customer.Id} to {bestStation.Id} {customer.State}");
     }
 
     private static void UpdateConsumption(GameResponseDto gameResponse, Recommendations rec)

@@ -14,6 +14,7 @@ internal static class ConfigParams
     public static bool Schedule { get; set; } = false;
 
     public static string MapName { get; set; } = "";
+    public static bool VerboseLog { get; set; } = false;
 
     internal static void ReadInput(string[]? args)
     {
@@ -22,7 +23,8 @@ internal static class ConfigParams
 
         SaveToServer = args.Contains("save");
         Schedule = args.Contains("schedule");
-                
+        VerboseLog = args.Contains("verbose");
+
         for (int i = 0; i < args.Length; i++)
         {
             switch (i)

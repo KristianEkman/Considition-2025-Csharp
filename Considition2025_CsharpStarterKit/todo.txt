@@ -26,3 +26,15 @@ Save a tick by not doing last charge?
 
 Search for best value locally of important constants
 - Done manually
+
+Result noschedule, faulty cut off.
+Tubohill Score: 5784 + 4418 = 10202 Count: 58 Ran out: 6 Reached: 39
+Batterytown: Score: 27291 + 24863 = 52154 Count: 352 Ran out: 94 Reached: 152
+Clutchfield:  Score: 22283 + 28664 = 50947 Count: 276 Ran out: 67 Reached: 126
+Thunderroad:
+
+Result noschedule.
+Tubohill     Score: 8169 + 4360 = 12529   Count: 63  Ran out: 6   Reached: 43
+Batterytown: Score: 26204 + 21788 = 47992 Count: 345 Ran out: 104 Reached: 146
+Clutchfield: Score: 21076 + 25835 = 46911 Count: 277 Ran out: 88 Reached: 127
+Thunderroad:

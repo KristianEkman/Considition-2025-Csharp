@@ -170,7 +170,7 @@ public record NodeDto
             score *= (1 + (green / 100f));
         }
 
-        var price = zone.Sourceinfo.Any() ? zone.Sourceinfo.Select(s => s.Value.PricePerMWh).Average() : 0;
+        var price = zone.Sourceinfo != null && zone.Sourceinfo.Any() ? zone.Sourceinfo.Select(s => s.Value.PricePerMWh).Average() : 0;
         if (persona == "CostSensitive")
         {
             score *= (1 + (price / 100f));

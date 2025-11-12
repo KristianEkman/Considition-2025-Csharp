@@ -227,3 +227,147 @@ Final Score: 6776 + 27625 = 34401 Count: 262 Ran out: 85 Reached: 112
 2025-11-12 16:37:51
 Map: Clutchfield SkipChargeLimit: 0,95 Save: True
 Final Score: 7068 + 29584 = 36652 Count: 272 Ran out: 76 Reached: 123
+
+----------------
+2025-11-12 19:13:39
+Map: Turbohill SkipChargeLimit: 0,95 Save: False Schedule Stations: False
+
+----------------
+2025-11-12 19:15:37
+Map: Turbohill SkipChargeLimit: 0,95 Save: False Schedule Stations: False
+
+----------------
+2025-11-12 19:17:31
+Map: Turbohill SkipChargeLimit: 0,95 Save: False Schedule Stations: False
+
+----------------
+2025-11-12 19:17:58
+Map: Turbohill SkipChargeLimit: 0,95 Save: False Schedule Stations: False
+
+----------------
+2025-11-12 19:18:12
+Map: Turbohill SkipChargeLimit: 0,95 Save: False Schedule Stations: False
+
+----------------
+2025-11-12 19:19:57
+Map: Turbohill SkipChargeLimit: 0,95 Save: False Schedule Stations: False
+
+----------------
+2025-11-12 19:20:57
+Map: Turbohill SkipChargeLimit: 0,95 Save: False Schedule Stations: False
+Final Score: 2717 + 4360 = 7077 Count: 63 Ran out: 6 Reached: 43
+
+----------------
+2025-11-12 19:26:03
+Map: Turbohill SkipChargeLimit: 0,95 Save: False Schedule Stations: False
+Final Score: 2717 + 4360 = 7077 Count: 63 Ran out: 6 Reached: 43
+
+----------------
+2025-11-12 19:26:41
+Map: Batterytown SkipChargeLimit: 0,95 Save: True Schedule Stations: False
+Final Score: 8733 + 20478 = 29211 Count: 346 Ran out: 101 Reached: 146
+Batterytown  Score 8733 + 20478 = 29211
+
+----------------
+2025-11-12 19:28:06
+Map: Batterytown SkipChargeLimit: 0,95 Save: True Schedule Stations: True
+Final Score: 9191 + 23022 = 32213 Count: 358 Ran out: 90 Reached: 160
+Batterytown  Score 9191 + 23099 = 32290
+
+----------------
+2025-11-12 19:29:38
+Map: Clutchfield SkipChargeLimit: 0,95 Save: False Schedule Stations: False
+Final Score: 7286 + 27606 = 34892 Count: 280 Ran out: 74 Reached: 130
+
+----------------
+2025-11-12 19:30:35
+Map: Clutchfield SkipChargeLimit: 0,95 Save: False Schedule Stations: True
+Final Score: 6698 + 25353 = 32051 Count: 274 Ran out: 84 Reached: 124
+
+----------------
+2025-11-12 19:31:32
+Map: Turbohill SkipChargeLimit: 0,95 Save: False Schedule Stations: False
+Final Score: 2717 + 4360 = 7077 Count: 63 Ran out: 6 Reached: 43
+
+----------------
+2025-11-12 20:14:57
+Map: Turbohill SkipChargeLimit: 0,95 Save: False Schedule Stations: False
+Final Score: 2607 + 4266 = 6873 Count: 62 Ran out: 6 Reached: 42
+
+----------------
+2025-11-12 20:15:30
+Map: Turbohill SkipChargeLimit: 0,95 Save: False Schedule Stations: False
+Final Score: 1236 + 2454 = 3690 Count: 42 Ran out: 15 Reached: 22
+
+----------------
+2025-11-12 20:16:05
+Map: Turbohill SkipChargeLimit: 0,95 Save: False Schedule Stations: False
+Final Score: 1590 + 3260 = 4850 Count: 48 Ran out: 9 Reached: 28
+
+----------------
+2025-11-12 20:16:39
+Map: Turbohill SkipChargeLimit: 0,95 Save: False Schedule Stations: False
+Final Score: 2717 + 4360 = 7077 Count: 63 Ran out: 6 Reached: 43
+
+----------------
+2025-11-12 20:17:18
+Map: Batterytown SkipChargeLimit: 0,95 Save: False Schedule Stations: False
+Final Score: 8706 + 21788 = 30494 Count: 345 Ran out: 104 Reached: 146
+
+----------------
+2025-11-12 20:18:58
+Map: Batterytown SkipChargeLimit: 0,95 Save: False Schedule Stations: False
+Final Score: 9070 + 24863 = 33933 Count: 352 Ran out: 94 Reached: 152
+
+----------------
+2025-11-12 21:05:51
+Map: Turbohill SkipChargeLimit: 0,95 Save: False Schedule Stations: False
+Final Score: 5784 + 4418 = 10202 Count: 58 Ran out: 6 Reached: 39
+
+----------------
+2025-11-12 21:06:21
+Map: Turbohill SkipChargeLimit: 0,95 Save: True Schedule Stations: False
+
+----------------
+2025-11-12 21:07:41
+Map: Batterytown SkipChargeLimit: 0,95 Save: False Schedule Stations: False
+Final Score: 27291 + 24863 = 52154 Count: 352 Ran out: 94 Reached: 152
+
+----------------
+2025-11-12 21:09:43
+Map: Clutchfield SkipChargeLimit: 0,95 Save: False Schedule Stations: False
+Final Score: 22283 + 28664 = 50947 Count: 276 Ran out: 67 Reached: 126
+
+----------------
+2025-11-12 21:11:14
+Map: Thunderroad SkipChargeLimit: 0,95 Save: False Schedule Stations: False
+
+----------------
+2025-11-12 21:15:18
+Map: Thunderroad SkipChargeLimit: 0,95 Save: False Schedule Stations: False
+Final Score: 17443 + 9863 = 27306 Count: 404 Ran out: 142 Reached: 104
+
+----------------
+2025-11-12 21:22:00
+Map: Thunderroad SkipChargeLimit: 0,95 Save: False Schedule Stations: False
+Final Score: 17443 + 9863 = 27306 Count: 404 Ran out: 142 Reached: 104
+
+----------------
+2025-11-12 21:33:50
+Map: Turbohill SkipChargeLimit: 0,95 Save: False Schedule Stations: False
+Final Score: 8169 + 4360 = 12529 Count: 63 Ran out: 6 Reached: 43
+
+----------------
+2025-11-12 21:35:16
+Map: Batterytown SkipChargeLimit: 0,95 Save: False Schedule Stations: False
+Final Score: 26204 + 21788 = 47992 Count: 345 Ran out: 104 Reached: 146
+
+----------------
+2025-11-12 21:37:01
+Map: Clutchfield SkipChargeLimit: 0,95 Save: False Schedule Stations: False
+Final Score: 21076 + 25835 = 46911 Count: 277 Ran out: 88 Reached: 127
+
+----------------
+2025-11-12 21:38:54
+Map: Thunderroad SkipChargeLimit: 0,95 Save: False Schedule Stations: False
+Final Score: 20760 + 14332 = 35092 Count: 414 Ran out: 142 Reached: 114
