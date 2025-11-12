@@ -10,7 +10,7 @@ internal static class ConfigParams
 {
     public static float SkipChargeLimit { get; set; } = 0.95f;
 
-    public static bool SaveToServer { get; set; } = true;
+    public static bool SaveToServer { get; set; } = false;
 
     public static string MapName { get; set; } = "";
 

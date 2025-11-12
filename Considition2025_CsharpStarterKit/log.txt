@@ -8,3 +8,18 @@ Final Score: 3560 + 1597 = 5157 Count: 76 Ran out: 2 Reached: 56
 2025-11-10 12:35:33
 Map:  SkipChargeLimit: 0,47 Save: False
 Final Score: 3560 + 1597 = 5157 Count: 76 Ran out: 2 Reached: 56
+
+----------------
+2025-11-12 03:56:14
+Map:  SkipChargeLimit: 0,95 Save: True
+Final Score: 6395 + 26413 = 32808 Count: 261 Ran out: 90 Reached: 113
+
+----------------
+2025-11-12 04:05:22
+Map: Turbohill SkipChargeLimit: 0,95 Save: True
+Final Score: 1922 + 4418 = 6340 Count: 58 Ran out: 6 Reached: 39
+
+----------------
+2025-11-12 04:06:10
+Map: Batterytown SkipChargeLimit: 0,95 Save: True
+Final Score: 9070 + 24863 = 33933 Count: 352 Ran out: 94 Reached: 152

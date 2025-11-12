@@ -1,6 +1,6 @@
-﻿
+﻿make sure charged before going to destination
+
 Personas
-EcoConscious 
 
 Route to places where charging is good.
 
@@ -10,11 +10,9 @@ When charging (for low energy maps)
 	- calc min level to reach
 	- then set a value to charge to depenging on config
 	- try different values and select the best one
-	
 
 Look at awailable energy in different zones.
 	- Select from current and next zone.
-	- Prefer Green Energy for EcosConsious
 	- Prefer when charging is faster.
 	- Disregard if energy is low
 
@@ -24,9 +22,6 @@ Check why some cars runs out.
 
 Save a tick by not doing last charge?
 	- It seams better to find a ballance since charging gives score.
-
-- Test if it is possible to change path.
-	- It seams so
 
 Search for best value locally of important constants
 - Done manually
