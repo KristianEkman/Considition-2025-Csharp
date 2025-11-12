@@ -1,12 +1,4 @@
-﻿Predict free chargers.
-	- Customers at tick n
-	- Free chargers at tick n
-
-New strattegy
- - Just go to the nearest station that has good charging speed and is free.
-
-Personas
-	- stressed, select fastest charger
+﻿Dont charge at same place twice.
 
 Route to places where charging is good.
 
