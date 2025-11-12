@@ -163,7 +163,6 @@ public record NodeDto
         //var score = station.AmountOfAvailableChargers * station.ChargeSpeedPerCharger;
         var score = (station.TotalAmountOfChargers - station.TotalAmountOfBrokenChargers) * station.ChargeSpeedPerCharger;
 
-
         var green = zone.StorageInfo != null && zone.StorageInfo.Any() ? zone.StorageInfo.Select(s => s.StoredGreenPercent).Average() : 0;
         if (persona == "EcoConscious")
         {

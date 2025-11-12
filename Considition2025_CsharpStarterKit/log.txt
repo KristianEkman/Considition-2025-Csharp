@@ -159,3 +159,13 @@ Final Score: 7344 + 21027 = 28371 Count: 262 Ran out: 88 Reached: 113
 2025-11-12 10:36:41
 Map: Clutchfield SkipChargeLimit: 0,95 Save: True
 Final Score: 5489 + 28680 = 34169 Count: 247 Ran out: 80 Reached: 97
+
+----------------
+2025-11-12 12:32:19
+Map: Turbohill SkipChargeLimit: 0,95 Save: False
+Final Score: 233 + 7200 = 7433 Count: 25 Ran out: 8 Reached: 5
+
+----------------
+2025-11-12 12:35:23
+Map: Turbohill SkipChargeLimit: 0,95 Save: True
+Final Score: 233 + 7200 = 7433 Count: 25 Ran out: 8 Reached: 5

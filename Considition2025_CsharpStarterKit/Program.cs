@@ -31,7 +31,7 @@ public class Program
 
 
         // "Turbohill" "Clutchfield" "Batterytown"
-        var mapName = ConfigParams.MapName != "" ? ConfigParams.MapName : "Clutchfield";
+        var mapName = ConfigParams.MapName != "" ? ConfigParams.MapName : "Turbohill";
         ConfigParams.MapName = mapName;
         // client.SaveGetMapConfig(mapName);
         //await client.PostOwnConfig(new GameInputAndMapConfigDto
@@ -220,7 +220,7 @@ public class Program
     )
     {
         ConsumptionRec consumption;
-        var guessed = customer.Type == "Truck" ? 0.1f : customer.Type == "Car" ? 0.004f : 0.003f;
+        var guessed = customer.Type == "Truck" ? 0.15f : customer.Type == "Car" ? 0.005f : 0.005f;
         if (!rec.Consumption.ContainsKey(customer.Id))
         {
             consumption = new ConsumptionRec("", "", 0, guessed);
@@ -251,20 +251,16 @@ public class Program
 
         if (customer.State == CustomerState.Charging)
             rec.HasCharged.Add(customer.Id);
-
-        // Customer wants to reach its destination
-        var path = rec.DijkstraPath(atNode.Id, customer.ToNode);
-        var dis = rec.PathDistance(path, atNode.Id, customer.ToNode);
-        var batteryCharge = dis * consumption.batteryPtcPerKm + 0.1;
-        if (customer.ChargeRemaining > batteryCharge && rec.HasCharged.Contains(customer.Id))
-            return;
-
+        
         var allStations = map.Nodes.Where(n => n.Target is ChargingStationDto).ToList();
         var nearestDistance = float.MaxValue;
         NodeDto bestStation = null;
         var bestStationScore = 0f;
         foreach (var toStation in allStations)
         {
+            //if (atNode.Id == toStation.Id)
+            //    continue;
+
             var toStationPath = rec.DijkstraPath(atNode.Id, toStation.Id);
             // Can I reach this station?
             if (toStationPath == null || !toStationPath.Any())
@@ -272,29 +268,30 @@ public class Program
                 continue;
             }
 
+            // todo check in future ticks that there are fre chargers
+
             //Is energy enough to reach this station?
             var p = rec.DijkstraPath(atNode.Id, toStation.Id);
             var d = rec.PathDistance(p, atNode.Id, toStation.Id);
 
             // This faulty calulation is aparently needed
-            var needed = d * customer.EnergyConsumptionPerKm;
-            var actual = customer.ChargeRemaining * customer.MaxCharge;
-            if (actual < needed)
+            var needed = d * consumption.batteryPtcPerKm + .1;
+            var actual = customer.ChargeRemaining;
+            if (needed > actual)
             {
                 continue;
             }
 
-            var stationScore = toStation.GetScore(rec.GameResponse, customer.Persona);
-            if (stationScore > bestStationScore)
+            if (d < nearestDistance)
             {
-                bestStationScore = stationScore;
+                nearestDistance = d;
                 bestStation = toStation;
             }
         }
 
         if (bestStation == null)
         {
-            //Console.WriteLine($"Found no station to route to. {customer.Id} at node {atNode.Id} ");
+            // Console.WriteLine($"Found no station to route to. {customer.Id} at node {atNode.Id} ");
             return;
         }
 

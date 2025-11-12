@@ -10,7 +10,7 @@ internal static class ConfigParams
 {
     public static float SkipChargeLimit { get; set; } = 0.95f;
 
-    public static bool SaveToServer { get; set; } = false;
+    public static bool SaveToServer { get; set; } = true;
 
     public static string MapName { get; set; } = "";
 
@@ -18,6 +18,8 @@ internal static class ConfigParams
     {
         if (args == null || args.Length == 0)
             return;
+
+        SaveToServer = args.Contains("save");
 
         Console.WriteLine($"Save {SaveToServer}");
         for (int i = 0; i < args.Length; i++)
@@ -28,7 +30,9 @@ internal static class ConfigParams
                     MapName = args[i];
                     break;
                 case 1:
-                    SkipChargeLimit = float.Parse(args[i]);
+                    var f = 0f;
+                    if (float.TryParse(args[i], out f))
+                        SkipChargeLimit = f;
                     break;
 
                 default:
