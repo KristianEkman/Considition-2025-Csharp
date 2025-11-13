@@ -194,6 +194,14 @@ public record NodeDto
         // var green = zone.StorageInfo != null && zone.StorageInfo.Any() ? zone.StorageInfo.Select(s => s.StoredGreenPercent).Average() : 0;
         return zone.Sourceinfo != null && zone.Sourceinfo.Select(s => s.Value.IsGreen).Any();
     }
+
+    internal float GetPrice(Recommendations rec)
+    {
+        var zone = rec.GameResponse.ZoneLogs.Last().Zones.Single(z => z.ZoneId == ZoneId);
+
+        var price = zone.Sourceinfo != null && zone.Sourceinfo.Any() ? zone.Sourceinfo.Select(s => s.Value.PricePerMWh).Average() : 0;
+        return price;
+    }
 }
 
 public record NullTargetDto : TargetDto
