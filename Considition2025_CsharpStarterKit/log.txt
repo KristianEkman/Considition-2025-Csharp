@@ -371,3 +371,24 @@ Final Score: 21076 + 25835 = 46911 Count: 277 Ran out: 88 Reached: 127
 2025-11-12 21:38:54
 Map: Thunderroad SkipChargeLimit: 0,95 Save: False Schedule Stations: False
 Final Score: 20760 + 14332 = 35092 Count: 414 Ran out: 142 Reached: 114
+
+----------------
+2025-11-13 05:54:22
+Map: Turbohill SkipChargeLimit: 0,95 Save: False Schedule Stations: False
+Final Score:Turbohill 8169 + 4360 = 12529 Count: 63 Ran out: 6 Reached: 43
+
+----------------
+2025-11-13 05:55:28
+Map: Turbohill SkipChargeLimit: 0,95 Save: True Schedule Stations: False
+Final Score:Turbohill 8169 + 4360 = 12529 Count: 63 Ran out: 6 Reached: 43
+Turbohill 019a7b91-ade2-7e5a-a2c3-2d26839252d7 Score 8169 + 4377 = 12546
+
+----------------
+2025-11-13 05:58:35
+Map: Thunderroad SkipChargeLimit: 0.95 Save: False Schedule Stations: False
+Final Score:Thunderroad 20760 + 14332 = 35092 Count: 414 Ran out: 142 Reached: 114
+
+----------------
+2025-11-13 06:03:26
+Map: Thunderroad SkipChargeLimit: 0.95 Save: False Schedule Stations: False
+Final Score:Thunderroad 22549 + 22884 = 45433 Count: 423 Ran out: 145 Reached: 124

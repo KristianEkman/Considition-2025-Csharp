@@ -10,9 +10,10 @@ class Recommendations
 
         var stations = map.Nodes.Where(n => n.Target is ChargingStationDto);
         var dict = new List<(string, int)>();
-        foreach (var station in stations) { 
+        foreach (var station in stations)
+        {
             var charger = (ChargingStationDto)station.Target;
-            var item = (station.Id,  charger.TotalAmountOfChargers - charger.TotalAmountOfBrokenChargers);
+            var item = (station.Id, charger.TotalAmountOfChargers - charger.TotalAmountOfBrokenChargers);
             dict.Add(item);
         }
         StationSchedule = new StationSchedule(dict.ToDictionary());
@@ -30,7 +31,7 @@ class Recommendations
     private Dictionary<(string start, string goal), List<string>> PathCache { get; set; } = new();
 
     public Dictionary<string, ConsumptionRec> Consumption { get; set; } = new();
-    public List<string> HasCharged { get; } = new();
+    public List<(string customerId, string stationId)> HasCharged { get; } = new();
     public GameResponseDto GameResponse { get; private set; }
 
     public void BuildAdjacency(MapDto map)

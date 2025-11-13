@@ -241,14 +241,14 @@ public class Program
             return;
 
         if (customer.State == CustomerState.Charging)
-            rec.HasCharged.Add(customer.Id);
+            rec.HasCharged.Add((customer.Id, atNode.Id));
 
         // Customer wants to reach its destination
         var path = rec.DijkstraPath(atNode.Id, customer.ToNode);
         var dis = rec.PathDistance(path, atNode.Id, customer.ToNode);
         var batteryCharge = dis * consumption.batteryPtcPerKm + 0.1;
-        if (customer.ChargeRemaining > batteryCharge && rec.HasCharged.Contains(customer.Id))
-            return;
+        if (customer.ChargeRemaining > batteryCharge && rec.HasCharged.Any(hc => hc.customerId == customer.Id))
+            return; // Has enough charge to reach destination, just go there
 
         var allStations = map.Nodes.Where(n => n.Target is ChargingStationDto).ToList();
         var nearestDistance = float.MaxValue;
@@ -256,6 +256,9 @@ public class Program
         var bestStationScore = 0f;
         foreach (var toStation in allStations)
         {
+            if (rec.HasCharged.Any(hc => hc.customerId == customer.Id && hc.stationId == toStation.Id))
+                continue; // Already charged at this station
+
             var toStationPath = rec.DijkstraPath(atNode.Id, toStation.Id);
             // Can I reach this station?
             if (toStationPath == null || !toStationPath.Any())
