@@ -392,3 +392,76 @@ Final Score:Thunderroad 20760 + 14332 = 35092 Count: 414 Ran out: 142 Reached: 1
 2025-11-13 06:03:26
 Map: Thunderroad SkipChargeLimit: 0.95 Save: False Schedule Stations: False
 Final Score:Thunderroad 22549 + 22884 = 45433 Count: 423 Ran out: 145 Reached: 124
+
+----------------
+2025-11-13 06:07:50
+Map: Thunderroad SkipChargeLimit: 0.95 Save: False Schedule Stations: True
+Final Score:Thunderroad 22011 + 23493 = 45504 Count: 428 Ran out: 155 Reached: 128
+
+----------------
+2025-11-13 06:10:38
+Map: Batterytown SkipChargeLimit: 0.95 Save: False Schedule Stations: False
+Final Score:Batterytown 30335 + 20114 = 50449 Count: 373 Ran out: 89 Reached: 173
+
+----------------
+2025-11-13 06:12:03
+Map: Batterytown SkipChargeLimit: 0.95 Save: True Schedule Stations: True
+Final Score:Batterytown 28967 + 19141 = 48108 Count: 364 Ran out: 100 Reached: 164
+Batterytown 019a7ba1-b761-7643-895f-767a8ad42a96 Score 28967 + 19169 = 48136
+
+----------------
+2025-11-13 06:13:33
+Map: Batterytown SkipChargeLimit: 0.95 Save: True Schedule Stations: False
+Final Score:Batterytown 30335 + 20114 = 50449 Count: 373 Ran out: 89 Reached: 173
+Batterytown 019a7ba3-1030-782b-9817-378493fff80e Score 30335 + 20140 = 50475
+
+----------------
+2025-11-13 06:14:54
+Map: Clutchfield SkipChargeLimit: 0.95 Save: False Schedule Stations: True
+Final Score:Clutchfield 19864 + 22712 = 42576 Count: 264 Ran out: 96 Reached: 114
+
+----------------
+2025-11-13 06:16:06
+Map: Clutchfield SkipChargeLimit: 0.95 Save: True Schedule Stations: False
+Final Score:Clutchfield 22133 + 22010 = 44143 Count: 278 Ran out: 84 Reached: 128
+Clutchfield 019a7ba5-0d6f-7c75-b578-3b2bfd85a36b Score 22133 + 22045 = 44178
+
+----------------
+2025-11-13 06:20:20
+Map: Turbohill SkipChargeLimit: 0.95 Save: False Schedule Stations: False
+Final Score:Turbohill 6592 + 3984 = 10576 Count: 63 Ran out: 4 Reached: 43
+
+----------------
+2025-11-13 06:20:47
+Map: Clutchfield SkipChargeLimit: 0.95 Save: False Schedule Stations: False
+Final Score:Clutchfield 22095 + 23076 = 45171 Count: 271 Ran out: 90 Reached: 123
+
+----------------
+2025-11-13 06:22:22
+Map: Clutchfield SkipChargeLimit: 0.95 Save: False Schedule Stations: False
+Final Score:Clutchfield 22315 + 22654 = 44969 Count: 272 Ran out: 82 Reached: 122
+
+----------------
+2025-11-13 06:23:24
+Map: Clutchfield SkipChargeLimit: 0.95 Save: False Schedule Stations: False
+Final Score:Clutchfield 14317 + 15539 = 29856 Count: 240 Ran out: 103 Reached: 91
+
+----------------
+2025-11-13 06:24:08
+Map: Clutchfield SkipChargeLimit: 0.95 Save: False Schedule Stations: False
+Final Score:Clutchfield 22141 + 22046 = 44187 Count: 277 Ran out: 84 Reached: 130
+
+----------------
+2025-11-13 06:25:20
+Map: Turbohill SkipChargeLimit: 0.95 Save: False Schedule Stations: False
+Final Score:Turbohill 6947 + 4756 = 11703 Count: 64 Ran out: 3 Reached: 44
+
+----------------
+2025-11-13 06:26:02
+Map: Turbohill SkipChargeLimit: 0.95 Save: False Schedule Stations: False
+Final Score:Turbohill 7344 + 4257 = 11601 Count: 64 Ran out: 5 Reached: 45
+
+----------------
+2025-11-13 06:26:27
+Map: Turbohill SkipChargeLimit: 0.95 Save: False Schedule Stations: False
+Final Score:Turbohill 6947 + 4756 = 11703 Count: 64 Ran out: 3 Reached: 44

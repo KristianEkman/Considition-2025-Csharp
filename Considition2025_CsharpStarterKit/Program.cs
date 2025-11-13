@@ -270,15 +270,15 @@ public class Program
             var p = rec.DijkstraPath(atNode.Id, toStation.Id);
             var d = rec.PathDistance(p, atNode.Id, toStation.Id);
 
-            //This faulty calulation is aparently needed
-            //var needed = d * customer.EnergyConsumptionPerKm;
-            //var actual = customer.ChargeRemaining * customer.MaxCharge;
-            //if (actual < needed)
-            //{
-            //    continue;
-            //}
+            // This faulty calulation is aparently needed
+            // var needed = d * customer.EnergyConsumptionPerKm;
+            // var actual = customer.ChargeRemaining * customer.MaxCharge;
+            // if (actual < needed)
+            // {
+            //     continue;
+            // }
 
-            var needed = d * consumption.batteryPtcPerKm;
+            var needed = d * consumption.batteryPtcPerKm + 0.1f;
             if (customer.ChargeRemaining < needed)
             {
                 continue;

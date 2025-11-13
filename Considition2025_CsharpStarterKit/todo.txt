@@ -1,11 +1,11 @@
-﻿Dont charge at same place twice.
+﻿Charge less to gain time
 
-Route to places where charging is good.
+unless green charge at closest
+
+shorter shedule
 
 Check why the fault enegy exit is needed.
 - download config and look at one car
-
-Optimize to charge to even tick.
 
 When charging (for low energy maps)
 	- calc min level to reach
