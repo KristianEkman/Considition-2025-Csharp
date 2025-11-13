@@ -1,9 +1,10 @@
-﻿
-Charge less to gain time
+﻿Load from more than one.
 
-score function with distance
+EcoConscious special case
 
-longer shedule?
+
+
+longer shedule? allow que of on
 
 When charging (for low energy maps)
 	- calc min level to reach

@@ -254,9 +254,12 @@ public class Program
             return; // Has enough charge to reach destination, just go there
 
         var allStations = map.Nodes.Where(n => n.Target is ChargingStationDto).ToList();
+        var eco = customer.Persona == "EcoConscious";
+
         var nearestDistance = float.MaxValue;
         NodeDto bestStation = null;
         var bestStationScore = 0f;
+        var bestIsGreen = false;
         foreach (var toStation in allStations)
         {
             if (rec.HasCharged.Any(hc => hc.customerId == customer.Id && hc.stationId == toStation.Id))
@@ -287,7 +290,7 @@ public class Program
 
             if (customer.State == CustomerState.TransitioningToNode && ConfigParams.Schedule)
             {
-                if (!rec.StationSchedule.IsFree(toStation.Id, tick + 1, tick + 2))
+                if (!rec.StationSchedule.IsFree(toStation.Id, tick + 1, tick + 3))
                 {
                     continue;
                 }
@@ -308,10 +311,13 @@ public class Program
                 if (goalPath == null || !goalPath.Any()) return;
                 var compinedPath = toStationPath.Concat(goalPath.Skip(1)).ToList();
                 var totalDistance = rec.PathDistance(compinedPath, atNode.Id, customer.ToNode);
-                if (totalDistance < nearestDistance)
+                var closerOrGreener = totalDistance < nearestDistance || (eco && !bestIsGreen && toStation.IsGreen(rec));
+                
+                if (closerOrGreener)
                 {
                     nearestDistance = totalDistance;
                     bestStation = toStation;
+                    bestIsGreen = toStation.IsGreen(rec);
                 }
             }
             else
@@ -333,7 +339,7 @@ public class Program
 
         if (customer.State == CustomerState.TransitioningToNode && ConfigParams.Schedule)
         {
-            if (!rec.StationSchedule.Reserve(bestStation.Id, tick + 1, tick + 2))
+            if (!rec.StationSchedule.Reserve(bestStation.Id, tick + 1, tick + 3))
             {
                 return;
             }

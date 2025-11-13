@@ -180,6 +180,20 @@ public record NodeDto
 
         return score;
     }
+
+    internal bool IsGreen(Recommendations rec)
+    {
+        var zone = rec.GameResponse.ZoneLogs.Last().Zones.Single(z => z.ZoneId == ZoneId);
+
+        if (zone.TotalProduction - zone.TotalDemand < 0)
+            return false;
+
+        var production = zone.Sourceinfo != null && zone.Sourceinfo.Any() ? zone.Sourceinfo.Select(s => s.Value.Production).Sum() : 0;
+        var greenProduction = zone.Sourceinfo != null && zone.Sourceinfo.Any() ? zone.Sourceinfo.Where(s => s.Value.IsGreen).Select(s => s.Value.Production).Sum() : 0;
+
+        // var green = zone.StorageInfo != null && zone.StorageInfo.Any() ? zone.StorageInfo.Select(s => s.StoredGreenPercent).Average() : 0;
+        return zone.Sourceinfo != null && zone.Sourceinfo.Select(s => s.Value.IsGreen).Any();
+    }
 }
 
 public record NullTargetDto : TargetDto

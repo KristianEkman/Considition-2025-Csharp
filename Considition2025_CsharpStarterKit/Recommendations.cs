@@ -13,8 +13,8 @@ class Recommendations
         foreach (var station in stations)
         {
             var charger = (ChargingStationDto)station.Target;
-            var item = (station.Id, charger.TotalAmountOfChargers - charger.TotalAmountOfBrokenChargers);
-            dict.Add(item);
+            var count = (station.Id, charger.TotalAmountOfChargers - charger.TotalAmountOfBrokenChargers + 2);
+            dict.Add(count);
         }
         StationSchedule = new StationSchedule(dict.ToDictionary());
     }
