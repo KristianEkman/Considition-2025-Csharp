@@ -30,7 +30,7 @@ public class Program
         );
 
         // "Turbohill" "Clutchfield" "Batterytown" "Thunderroad"
-        var mapName = ConfigParams.MapName != "" ? ConfigParams.MapName : "Thunderroad";
+        var mapName = ConfigParams.MapName != "" ? ConfigParams.MapName : "Turbohill";
         ConfigParams.MapName = mapName;
 
         var map = await client.GetMap(mapName);
@@ -104,9 +104,12 @@ public class Program
                 Ticks = [.. goodTicks, currentTick],
             };
         }
+
         var topList = TopList.Load();
         topList.Add(mapName, finalScore);
         topList.Save();
+
+        rec.PrintConsumption();
 
         if (ConfigParams.SaveToServer)
         {
@@ -214,7 +217,7 @@ public class Program
     )
     {
         ConsumptionRec consumption;
-        var guessed = customer.Type == "Truck" ? 0.1f : customer.Type == "Car" ? 0.004f : 0.003f;
+        var guessed = customer.Type == "Truck" ? 0.008f : customer.Type == "Car" ? 0.003f : 0.003f;
         if (!rec.Consumption.ContainsKey(customer.Id))
         {
             consumption = new ConsumptionRec("", "", 0, guessed);
@@ -312,7 +315,7 @@ public class Program
                 var compinedPath = toStationPath.Concat(goalPath.Skip(1)).ToList();
                 var totalDistance = rec.PathDistance(compinedPath, atNode.Id, customer.ToNode);
                 var closerOrGreener = totalDistance < nearestDistance || (eco && !bestIsGreen && toStation.IsGreen(rec));
-                
+
                 if (closerOrGreener)
                 {
                     nearestDistance = totalDistance;

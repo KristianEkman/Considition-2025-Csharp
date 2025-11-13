@@ -121,4 +121,23 @@ class Recommendations
         return total;
     }
 
+    internal void PrintConsumption()
+    {
+        Console.WriteLine("Consumption records:");
+        var list = new List<(VehicleType, float?)>();
+        foreach (var kvp in Consumption)
+        {
+            var custId = kvp.Key;
+            var rec = kvp.Value;
+            var customer = GameResponse.CustomerLogs.Single(cl => cl.CustomerId == custId);
+            list.Add((customer.VehicleType, rec.batteryPtcPerKm));
+            Console.WriteLine($" Customer {custId} {customer.VehicleType}: batteryPtcPerKm={rec.batteryPtcPerKm} kWh");
+        }
+        var grouped = list.GroupBy(x => x.Item1).Select(g => (VehicleType: g.Key, AvgBatteryPtcPerKm: g.Average(x => x.Item2 ?? 0)));
+        Console.WriteLine("Average consumption per vehicle type:");
+        foreach (var g in grouped)
+        {
+            Console.WriteLine($" VehicleType {g.VehicleType}: AvgBatteryPtcPerKm={g.AvgBatteryPtcPerKm} kWh");
+        }        
+    }
 }

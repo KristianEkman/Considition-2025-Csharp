@@ -1099,3 +1099,84 @@ Final Score:Batterytown 45495 + 19862 = 65357 Count: 456 Ran out: 81 Reached: 25
 2025-11-13 14:44:19
 Map: Thunderroad Save: False Schedule: False Shortest: True
 Final Score:Thunderroad 28423 + 10350 = 38773 Count: 463 Ran out: 132 Reached: 164
+
+----------------
+2025-11-13 16:13:41
+Map: Turbohill Save: False Schedule: False Shortest: True
+Final Score:Turbohill 7814 + 4755 = 12569 Count: 77 Ran out: 3 Reached: 57
+
+----------------
+2025-11-13 16:15:46
+Map: Turbohill Save: False Schedule: False Shortest: True
+Final Score:Turbohill 10687 + 4479 = 15166 Count: 76 Ran out: 4 Reached: 57
+
+----------------
+2025-11-13 16:17:43
+Map: Turbohill Save: False Schedule: False Shortest: True
+Final Score:Turbohill 6024 + 3476 = 9500 Count: 58 Ran out: 13 Reached: 38
+
+----------------
+2025-11-13 16:18:08
+Map: Turbohill Save: False Schedule: False Shortest: True
+Final Score:Turbohill 10687 + 4479 = 15166 Count: 76 Ran out: 4 Reached: 57
+
+----------------
+2025-11-13 16:18:44
+Map: Turbohill Save: False Schedule: False Shortest: True
+Final Score:Turbohill 9636 + 4299 = 13935 Count: 76 Ran out: 5 Reached: 56
+
+----------------
+2025-11-13 16:19:16
+Map: Turbohill Save: False Schedule: False Shortest: True
+Final Score:Turbohill 10687 + 4479 = 15166 Count: 76 Ran out: 4 Reached: 57
+
+----------------
+2025-11-13 16:19:32
+Map: Turbohill Save: True Schedule: False Shortest: True
+Final Score:Turbohill 10687 + 4479 = 15166 Count: 76 Ran out: 4 Reached: 57
+
+----------------
+2025-11-13 16:22:43
+Map: Batterytown Save: False Schedule: False Shortest: True
+Final Score:Batterytown 45822 + 20032 = 65854 Count: 456 Ran out: 82 Reached: 258
+
+----------------
+2025-11-13 16:24:19
+Map: Batterytown Save: False Schedule: False Shortest: True
+Final Score:Batterytown 45977 + 21986 = 67963 Count: 462 Ran out: 87 Reached: 263
+
+----------------
+2025-11-13 16:25:41
+Map: Clutchfield Save: True Schedule: False Shortest: True
+Final Score:Clutchfield 27722 + 23563 = 51285 Count: 310 Ran out: 83 Reached: 160
+
+----------------
+2025-11-13 16:26:57
+Map: Thunderroad Save: False Schedule: False Shortest: True
+Final Score:Thunderroad 28412 + 10423 = 38835 Count: 456 Ran out: 118 Reached: 157
+
+----------------
+2025-11-13 16:32:15
+Map: Turbohill Save: False Schedule: False Shortest: True
+
+----------------
+2025-11-13 16:35:00
+Map: Turbohill Save: False Schedule: False Shortest: True
+
+----------------
+2025-11-13 16:35:26
+Map: Turbohill Save: False Schedule: False Shortest: True
+
+----------------
+2025-11-13 16:35:53
+Map: Turbohill Save: False Schedule: False Shortest: True
+Final Score:Turbohill 6024 + 3472 = 9496 Count: 58 Ran out: 11 Reached: 38
+
+----------------
+2025-11-13 16:39:08
+Map: Turbohill Save: False Schedule: False Shortest: True
+
+----------------
+2025-11-13 16:39:29
+Map: Turbohill Save: False Schedule: False Shortest: True
+Final Score:Turbohill 6024 + 3472 = 9496 Count: 58 Ran out: 11 Reached: 38
