@@ -26,15 +26,15 @@ class TopList
 
     // Add a score for a map. If the map already exists and the new score is not strictly better,
     // the score is disregarded. If new score is better, update it. Persist after change.
-    public void Add(string mapName, double score)
+    public bool Add(string mapName, double score)
     {
-        if (string.IsNullOrEmpty(mapName)) return;
+        if (string.IsNullOrEmpty(mapName)) return false;
 
         var existing = Entries.FirstOrDefault(e => string.Equals(e.MapName, mapName, StringComparison.OrdinalIgnoreCase));
         if (existing != null)
         {
             // Disregard scores that are not the best for this mapName.
-            if (score <= existing.Score) return;
+            if (score <= existing.Score) return false;
 
             existing.Score = score;
             existing.UpdatedUtc = DateTime.UtcNow;
@@ -49,6 +49,7 @@ class TopList
         Entries = Entries.OrderByDescending(e => e.Score).ThenBy(e => e.MapName).ToList();
 
         Save();
+        return true;
     }
 
     public void Save(string? filePath = null)

@@ -73,7 +73,7 @@ public class Program
 
             if (i == map.Ticks - 1)
             {
-                PrintCustomers(gameResponse, i);
+                // PrintCustomers(gameResponse, i);
                 File.AppendAllLines(
                     "log.txt",
                     [
@@ -106,7 +106,7 @@ public class Program
         }
 
         var topList = TopList.Load();
-        topList.Add(mapName, finalScore);
+        var best = topList.Add(mapName, finalScore);
         topList.Save();
 
         rec.PrintConsumption();
@@ -118,6 +118,7 @@ public class Program
             var text = $"{mapName} {serverResponse.GameId} Score {serverResponse.CustomerCompletionScore} + {serverResponse.KwhRevenue} = {serverResponse.Score}";
             File.AppendAllLines("log.txt", [text]);
             Console.WriteLine(text);
+            Console.WriteLine("Saved to server!");
         }
     }
 
@@ -217,7 +218,7 @@ public class Program
     )
     {
         ConsumptionRec consumption;
-        var guessed = customer.Type == "Truck" ? 0.008f : customer.Type == "Car" ? 0.003f : 0.003f;
+        var guessed = customer.Type == "Truck" ? 0.006f : customer.Type == "Car" ? 0.003f : 0.003f;
         if (!rec.Consumption.ContainsKey(customer.Id))
         {
             consumption = new ConsumptionRec("", "", 0, guessed);
@@ -252,12 +253,12 @@ public class Program
         // Customer wants to reach its destination
         var path = rec.DijkstraPath(atNode.Id, customer.ToNode);
         var dis = rec.PathDistance(path, atNode.Id, customer.ToNode);
-        var batteryCharge = dis * consumption.batteryPtcPerKm + 0.08f;
-        if (customer.ChargeRemaining > batteryCharge && rec.HasCharged.Any(hc => hc.customerId == customer.Id))
+        var batteryCharge = dis * consumption.batteryPtcPerKm + 0.09f;
+        if (customer.ChargeRemaining > batteryCharge && rec.HasCharged.Count(hc => hc.customerId == customer.Id) >= 3)
             return; // Has enough charge to reach destination, just go there
 
         var allStations = map.Nodes.Where(n => n.Target is ChargingStationDto).ToList();
-        var eco = customer.Persona == "EcoConscious";
+        var eco = customer.Persona != "Stressed";
 
         var nearestDistance = float.MaxValue;
         NodeDto bestStation = null;

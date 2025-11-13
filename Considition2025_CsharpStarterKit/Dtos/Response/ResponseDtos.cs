@@ -195,6 +195,86 @@ public record NodeDto
         return zone.Sourceinfo != null && zone.Sourceinfo.Select(s => s.Value.IsGreen).Any();
     }
 
+
+
+    // Returns true when the zone containing this node currently has available power.
+    // Decision logic:
+    //  - If TotalProduction >= TotalDemand => has power
+    //  - Else if there is stored energy available in storage (CurrentChargeMWh > small epsilon) => has power
+    //  - Otherwise no power available
+    internal bool HasPower(Recommendations rec)
+    {
+        // Defensive checks
+        if (rec?.GameResponse?.ZoneLogs == null || !rec.GameResponse.ZoneLogs.Any())
+            return true; // assume power if we don't have logs to judge
+
+        var zone = rec.GameResponse.ZoneLogs.Last().Zones.SingleOrDefault(z => z.ZoneId == ZoneId);
+        if (zone == null)
+            return true; // if no zone info, be permissive
+
+        try
+        {
+            // If production meets or exceeds demand, the zone has power
+            // if ((double)zone.TotalProduction - (double)zone.TotalDemand >= 0.0)
+            //     return true;
+
+            // Otherwise check storage: if any storage has a non-trivial stored amount, assume it can supply power
+            if (zone.StorageInfo != null && zone.StorageInfo.Any())
+            {
+                var totalStored = zone.StorageInfo.Sum(si => (double)si.CurrentChargeMWh);
+                if (totalStored > 0.0) // threshold in MWh
+                    return true;
+            }
+
+            // Otherwise, no available power in this zone
+            return false;
+        }
+        catch
+        {
+            // On any unexpected error, be permissive to avoid blocking routing
+            return true;
+        }
+    }
+
+    // Returns the total amount of green energy currently available for this node's zone.
+    // Sum of:
+    //  - green production (sum of Sourceinfo[...].Production for sources where IsGreen == true)
+    //  - stored green energy in storage (sum of CurrentChargeMWh * StoredGreenPercent/100)
+    // Units: production uses the same unit as ZoneLogDto.TotalProduction (assumed MWh or MW as provided by API);
+    // stored energy is in MWh. The caller should interpret the units consistently with zone logs.
+    internal double GetGreenFraction(Recommendations rec)
+    {
+        try
+        {
+            var zoneLogs = rec?.GameResponse?.ZoneLogs;
+            if (zoneLogs == null || !zoneLogs.Any())
+                return 0.0;
+
+            var zone = zoneLogs.Last().Zones.SingleOrDefault(z => z.ZoneId == ZoneId);
+            if (zone == null)
+                return 0.0;
+
+            double greenProduction = 0.0;
+            if (zone.Sourceinfo != null && zone.Sourceinfo.Any())
+            {
+                greenProduction = zone.Sourceinfo.Values.Where(si => si.IsGreen).Sum(si => (double)si.Production);
+            }
+
+            double storedGreenMWh = 0.0;
+            if (zone.StorageInfo != null && zone.StorageInfo.Any())
+            {
+                // StoredGreenPercent is 0-100; CurrentChargeMWh is MWh. Multiply to get green MWh.
+                storedGreenMWh = zone.StorageInfo.Sum(si => (double)si.CurrentChargeMWh * ((double)si.StoredGreenPercent / 100.0));
+            }
+
+            return greenProduction + storedGreenMWh;
+        }
+        catch
+        {
+            return 0.0;
+        }
+    }
+
     internal float GetPrice(Recommendations rec)
     {
         var zone = rec.GameResponse.ZoneLogs.Last().Zones.Single(z => z.ZoneId == ZoneId);

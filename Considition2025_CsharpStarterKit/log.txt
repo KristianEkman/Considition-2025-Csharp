@@ -1180,3 +1180,318 @@ Map: Turbohill Save: False Schedule: False Shortest: True
 2025-11-13 16:39:29
 Map: Turbohill Save: False Schedule: False Shortest: True
 Final Score:Turbohill 6024 + 3472 = 9496 Count: 58 Ran out: 11 Reached: 38
+
+----------------
+2025-11-13 18:05:42
+Map: Turbohill Save: False Schedule: False Shortest: True
+Final Score:Turbohill 9961 + 4263 = 14224 Count: 75 Ran out: 3 Reached: 55
+
+----------------
+2025-11-13 18:13:09
+Map: Turbohill Save: False Schedule: False Shortest: True
+Final Score:Turbohill 9961 + 4263 = 14224 Count: 75 Ran out: 3 Reached: 55
+
+----------------
+2025-11-13 18:13:18
+Map: Clutchfield Save: False Schedule: False Shortest: True
+Final Score:Clutchfield 26803 + 19466 = 46269 Count: 295 Ran out: 84 Reached: 146
+
+----------------
+2025-11-13 18:13:55
+Map: Batterytown Save: False Schedule: False Shortest: True
+Final Score:Batterytown 43396 + 21163 = 64559 Count: 454 Ran out: 80 Reached: 255
+
+----------------
+2025-11-13 18:14:48
+Map: Thunderroad Save: False Schedule: False Shortest: True
+Final Score:Thunderroad 34557 + 16430 = 50987 Count: 497 Ran out: 128 Reached: 198
+
+----------------
+2025-11-13 18:17:54
+Map: Turbohill Save: False Schedule: False Shortest: True
+Final Score:Turbohill 3283 + 2281 = 5564 Count: 41 Ran out: 16 Reached: 21
+
+----------------
+2025-11-13 18:18:01
+Map: Clutchfield Save: False Schedule: False Shortest: True
+
+----------------
+2025-11-13 18:18:49
+Map: Turbohill Save: False Schedule: False Shortest: True
+Final Score:Turbohill 3283 + 2281 = 5564 Count: 41 Ran out: 16 Reached: 21
+
+----------------
+2025-11-13 18:18:57
+Map: Clutchfield Save: False Schedule: False Shortest: True
+Final Score:Clutchfield 16636 + 11354 = 27990 Count: 247 Ran out: 106 Reached: 97
+
+----------------
+2025-11-13 18:19:29
+Map: Batterytown Save: False Schedule: False Shortest: True
+
+----------------
+2025-11-13 18:21:31
+Map: Windcity Save: True Schedule: False Shortest: True
+Final Score:Windcity 28801 + 4540 = 33341 Count: 389 Ran out: 127 Reached: 153
+Windcity 019a7e3d-84f3-7ee7-9322-ef2bfc090a03 Score 28801 + 4576 = 33377
+
+----------------
+2025-11-13 18:23:01
+Map: Windcity Save: True Schedule: True Shortest: True
+Final Score:Windcity 28212 + 4341 = 32553 Count: 394 Ran out: 122 Reached: 157
+Windcity  Score 28341 + 4377 = 32718
+
+----------------
+2025-11-13 18:24:14
+Map: Windcity Save: True Schedule: False Shortest: True
+Final Score:Windcity 29420 + 4547 = 33967 Count: 397 Ran out: 125 Reached: 160
+Windcity 019a7e3f-f115-7b76-8c2e-f5f9e99562ce Score 29561 + 4583 = 34144
+
+----------------
+2025-11-13 18:25:55
+Map: Windcity Save: True Schedule: False Shortest: True
+Final Score:Windcity 29235 + 4479 = 33714 Count: 391 Ran out: 128 Reached: 154
+Windcity  Score 29235 + 4479 = 33714
+
+----------------
+2025-11-13 18:27:18
+Map: Windcity Save: True Schedule: False Shortest: True
+Final Score:Windcity 29729 + 4988 = 34717 Count: 399 Ran out: 129 Reached: 162
+Windcity 019a7e42-c118-74fc-b854-e6461945afbd Score 30155 + 5024 = 35179
+
+----------------
+2025-11-13 18:28:48
+Map: Windcity Save: True Schedule: False Shortest: True
+Final Score:Windcity 28445 + 4117 = 32562 Count: 391 Ran out: 121 Reached: 154
+Windcity  Score 28445 + 4122 = 32567
+
+----------------
+2025-11-13 18:30:12
+Map: Windcity Save: True Schedule: False Shortest: True
+Final Score:Windcity 29545 + 5169 = 34714 Count: 397 Ran out: 119 Reached: 160
+Windcity  Score 29671 + 5219 = 34890
+
+----------------
+2025-11-13 18:32:27
+Map: Windcity Save: True Schedule: False Shortest: True
+Final Score:Windcity 13333 + 5712 = 19045 Count: 307 Ran out: 109 Reached: 70
+Windcity  Score 13333 + 5748 = 19081
+
+----------------
+2025-11-13 18:33:54
+Map: Windcity Save: True Schedule: False Shortest: True
+Final Score:Windcity 29729 + 4988 = 34717 Count: 399 Ran out: 129 Reached: 162
+Windcity  Score 30155 + 5024 = 35179
+
+----------------
+2025-11-13 18:35:41
+Map: Windcity Save: True Schedule: False Shortest: True
+Final Score:Windcity 30458 + 4509 = 34967 Count: 405 Ran out: 125 Reached: 169
+Windcity  Score 30458 + 4550 = 35008
+
+----------------
+2025-11-13 18:36:56
+Map: Windcity Save: True Schedule: False Shortest: True
+Final Score:Windcity 29311 + 3614 = 32925 Count: 400 Ran out: 132 Reached: 164
+Windcity  Score 29611 + 3614 = 33225
+
+----------------
+2025-11-13 18:38:52
+Map: Windcity Save: True Schedule: False Shortest: True
+Final Score:Windcity 28729 + 5237 = 33966 Count: 399 Ran out: 125 Reached: 162
+Windcity  Score 28729 + 5237 = 33966
+
+----------------
+2025-11-13 18:40:33
+Map: Windcity Save: True Schedule: False Shortest: True
+Final Score:Windcity 31170 + 4813 = 35983 Count: 396 Ran out: 124 Reached: 161
+Windcity 019a7e4e-d005-74a0-9842-a120e431ea69 Score 31170 + 4849 = 36019
+
+----------------
+2025-11-13 18:41:47
+Map: Windcity Save: True Schedule: False Shortest: True
+Final Score:Windcity 30370 + 5058 = 35428 Count: 405 Ran out: 117 Reached: 169
+Windcity  Score 30432 + 5064 = 35496
+
+----------------
+2025-11-13 18:43:00
+Map: Windcity Save: True Schedule: False Shortest: True
+Final Score:Windcity 30200 + 5168 = 35368 Count: 401 Ran out: 124 Reached: 164
+Windcity  Score 30500 + 5168 = 35668
+
+----------------
+2025-11-13 18:44:06
+Map: Windcity Save: True Schedule: False Shortest: True
+Final Score:Windcity 30095 + 5006 = 35101 Count: 397 Ran out: 118 Reached: 161
+Windcity  Score 30095 + 5006 = 35101
+
+----------------
+2025-11-13 18:48:42
+Map: Windcity Save: True Schedule: False Shortest: False
+Final Score:Windcity 23788 + 9312 = 33100 Count: 368 Ran out: 119 Reached: 131
+
+----------------
+2025-11-13 18:52:45
+Map: Windcity Save: True Schedule: False Shortest: True
+Final Score:Windcity 31170 + 4813 = 35983 Count: 396 Ran out: 124 Reached: 161
+
+----------------
+2025-11-13 18:55:53
+Map: Windcity Save: True Schedule: False Shortest: True
+Final Score:Windcity 29461 + 4300 = 33761 Count: 399 Ran out: 123 Reached: 163
+
+----------------
+2025-11-13 18:59:45
+Map: Windcity Save: True Schedule: False Shortest: True
+Final Score:Windcity 31170 + 4813 = 35983 Count: 396 Ran out: 124 Reached: 161
+
+----------------
+2025-11-13 19:03:41
+Map: Windcity Save: True Schedule: False Shortest: True
+Final Score:Windcity 15738 + 5846 = 21584 Count: 321 Ran out: 104 Reached: 85
+
+----------------
+2025-11-13 19:04:55
+Map: Windcity Save: True Schedule: False Shortest: True
+Final Score:Windcity 16874 + 5441 = 22315 Count: 329 Ran out: 113 Reached: 93
+
+----------------
+2025-11-13 19:06:36
+Map: Windcity Save: True Schedule: False Shortest: True
+Final Score:Windcity 31170 + 4813 = 35983 Count: 396 Ran out: 124 Reached: 161
+
+----------------
+2025-11-13 19:09:20
+Map: Windcity Save: True Schedule: False Shortest: True
+Final Score:Windcity 29788 + 3970 = 33758 Count: 394 Ran out: 128 Reached: 157
+
+----------------
+2025-11-13 19:10:30
+Map: Windcity Save: True Schedule: False Shortest: True
+Final Score:Windcity 29694 + 4228 = 33922 Count: 389 Ran out: 132 Reached: 152
+
+----------------
+2025-11-13 19:22:48
+Map: Windcity Save: False Schedule: False Shortest: True
+
+----------------
+2025-11-13 19:23:50
+Map: Pistonia Save: True Schedule: False Shortest: True
+
+----------------
+2025-11-13 19:23:50
+ConsiditionClient ERROR in GetMap: Response status code does not indicate success: 404 (Not Found).
+   at System.Net.Http.HttpResponseMessage.EnsureSuccessStatusCode()
+   at System.Net.Http.Json.HttpClientJsonExtensions.<FromJsonAsyncCore>g__Core|12_0[TValue,TJsonOptions](HttpClient client, Task`1 responseTask, Boolean usingResponseHeadersRead, CancellationTokenSource linkedCTS, Func`4 deserializeMethod, TJsonOptions jsonOptions, CancellationToken cancellationToken)
+   at Considition2025_CsharpStarterKit.ConsiditionClient.GetMap(String _mapName) in /Users/kristianekman/repos/Considition-2025-Csharp/Considition2025_CsharpStarterKit/ConsiditionClient.cs:line 74
+
+----------------
+2025-11-13 19:24:47
+Map: Pistonia Save: True Schedule: False Shortest: True
+Final Score:Pistonia 57941 + 44580 = 102521 Count: 564 Ran out: 88 Reached: 315
+Pistonia 019a7e77-bd34-7cf0-8abd-c1735162fc2e Score 58625 + 44656 = 103281
+
+----------------
+2025-11-13 19:27:55
+Map: Pistonia Save: True Schedule: False Shortest: True
+Final Score:Pistonia 57941 + 44580 = 102521 Count: 564 Ran out: 88 Reached: 315
+Pistonia  Score 58625 + 44656 = 103281
+
+----------------
+2025-11-13 19:30:20
+Map: Pistonia Save: True Schedule: False Shortest: True
+Final Score:Pistonia 57941 + 44580 = 102521 Count: 564 Ran out: 88 Reached: 315
+Pistonia  Score 58625 + 44656 = 103281
+
+----------------
+2025-11-13 19:32:17
+Map: Pistonia Save: True Schedule: False Shortest: True
+Final Score:Pistonia 57941 + 44580 = 102521 Count: 564 Ran out: 88 Reached: 315
+Pistonia  Score 58625 + 44656 = 103281
+
+----------------
+2025-11-13 19:34:57
+Map: Pistonia Save: True Schedule: False Shortest: True
+Final Score:Pistonia 57906 + 35624 = 93530 Count: 559 Ran out: 84 Reached: 312
+Pistonia  Score 57974 + 35624 = 93598
+
+----------------
+2025-11-13 19:38:16
+Map: Pistonia Save: True Schedule: False Shortest: True
+Final Score:Pistonia 61315 + 45466 = 106781 Count: 586 Ran out: 87 Reached: 336
+Pistonia 019a7e83-f8ac-7aa1-a6a1-5d9469a6a180 Score 61315 + 45607 = 106922
+
+----------------
+2025-11-13 19:40:17
+Map: Pistonia Save: True Schedule: False Shortest: True
+Final Score:Pistonia 59563 + 40454 = 100017 Count: 569 Ran out: 79 Reached: 322
+Pistonia  Score 60009 + 40530 = 100539
+
+----------------
+2025-11-13 19:50:21
+Map: Pistonia Save: True Schedule: False Shortest: True
+Final Score:Pistonia 61315 + 45466 = 106781 Count: 586 Ran out: 87 Reached: 336
+Pistonia  Score 61315 + 45607 = 106922
+
+----------------
+2025-11-13 19:52:24
+Map: Pistonia Save: True Schedule: False Shortest: True
+
+----------------
+2025-11-13 19:53:08
+Map: Pistonia Save: True Schedule: False Shortest: True
+Final Score:Pistonia 56330 + 48189 = 104519 Count: 561 Ran out: 84 Reached: 312
+Pistonia  Score 56630 + 48328 = 104958
+
+----------------
+2025-11-13 19:57:31
+Map: Pistonia Save: True Schedule: False Shortest: True
+Final Score:Pistonia 55356 + 47733 = 103089 Count: 561 Ran out: 83 Reached: 313
+Pistonia  Score 55770 + 47927 = 103697
+
+----------------
+2025-11-13 19:59:59
+Map: Pistonia Save: True Schedule: False Shortest: True
+Final Score:Pistonia 57639 + 46734 = 104373 Count: 565 Ran out: 77 Reached: 316
+Pistonia  Score 57805 + 46797 = 104602
+
+----------------
+2025-11-13 20:01:50
+Map: Pistonia Save: True Schedule: False Shortest: True
+Final Score:Pistonia 63700 + 46605 = 110305 Count: 591 Ran out: 77 Reached: 341
+Pistonia 019a7e99-8f9b-7f20-a3f5-9f3c8076a61f Score 63700 + 46738 = 110438
+
+----------------
+2025-11-13 20:04:12
+Map: Pistonia Save: True Schedule: False Shortest: True
+Final Score:Pistonia 59450 + 45995 = 105445 Count: 580 Ran out: 83 Reached: 331
+
+----------------
+2025-11-13 20:05:25
+ConsiditionClient ERROR in PostGame: Error BadRequest posting game: {"type":"https://tools.ietf.org/html/rfc9110#section-15.5.1","title":"Bad Request","status":400,"detail":"The specified map Pistonia is not available"}
+Response: {"type":"https://tools.ietf.org/html/rfc9110#section-15.5.1","title":"Bad Request","status":400,"detail":"The specified map Pistonia is not available"}
+
+----------------
+2025-11-13 20:05:25
+ConsiditionClient ERROR in PostGame: {"type":"https://tools.ietf.org/html/rfc9110#section-15.5.1","title":"Bad Request","status":400,"detail":"The specified map Pistonia is not available"}
+   at Considition2025_CsharpStarterKit.ConsiditionClient.PostGame(GameInputDto _inputDto) in /Users/kristianekman/repos/Considition-2025-Csharp/Considition2025_CsharpStarterKit/ConsiditionClient.cs:line 58
+
+----------------
+2025-11-13 20:05:42
+Map: Pistonia Save: True Schedule: False Shortest: True
+Final Score:Pistonia 59882 + 46684 = 106566 Count: 573 Ran out: 74 Reached: 323
+
+----------------
+2025-11-13 20:06:58
+ConsiditionClient ERROR in PostGame: Error BadRequest posting game: {"type":"https://tools.ietf.org/html/rfc9110#section-15.5.1","title":"Bad Request","status":400,"detail":"The specified map Pistonia is not available"}
+Response: {"type":"https://tools.ietf.org/html/rfc9110#section-15.5.1","title":"Bad Request","status":400,"detail":"The specified map Pistonia is not available"}
+
+----------------
+2025-11-13 20:06:58
+ConsiditionClient ERROR in PostGame: {"type":"https://tools.ietf.org/html/rfc9110#section-15.5.1","title":"Bad Request","status":400,"detail":"The specified map Pistonia is not available"}
+   at Considition2025_CsharpStarterKit.ConsiditionClient.PostGame(GameInputDto _inputDto) in /Users/kristianekman/repos/Considition-2025-Csharp/Considition2025_CsharpStarterKit/ConsiditionClient.cs:line 58
+
+----------------
+2025-11-13 20:07:17
+Map: Windcity Save: False Schedule: False Shortest: True
+Final Score:Windcity 28360 + 5506 = 33866 Count: 396 Ran out: 121 Reached: 159

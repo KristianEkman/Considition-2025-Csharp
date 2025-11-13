@@ -8,7 +8,7 @@ namespace Considition2025_CsharpStarterKit;
 
 internal static class ConfigParams
 {
-    public static bool SaveToServer { get; set; } = false;
+    public static bool SaveToServer { get; set; } = true;
     public static bool Schedule { get; set; } = false;
 
     public static string MapName { get; set; } = "";

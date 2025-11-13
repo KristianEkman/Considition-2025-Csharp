@@ -1,6 +1,11 @@
 {
   "Entries": [
     {
+      "MapName": "Pistonia",
+      "Score": 110305,
+      "UpdatedUtc": "2025-11-13T19:03:03.628029Z"
+    },
+    {
       "MapName": "Batterytown",
       "Score": 69911,
       "UpdatedUtc": "2025-11-13T10:47:25.281643Z"
@@ -14,6 +19,11 @@
       "MapName": "Clutchfield",
       "Score": 51525,
       "UpdatedUtc": "2025-11-13T13:43:25.417944Z"
+    },
+    {
+      "MapName": "Windcity",
+      "Score": 35983,
+      "UpdatedUtc": "2025-11-13T17:41:24.985172Z"
     },
     {
       "MapName": "Turbohill",
