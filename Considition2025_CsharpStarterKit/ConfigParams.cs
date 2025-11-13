@@ -22,9 +22,9 @@ internal static class ConfigParams
         MapName = args[0];
 
         SaveToServer = args.Contains("save");
-        Schedule = args.Contains("schedule");
-        VerboseLog = args.Contains("verbose");
-        Shortest = args.Contains("shortest");
+        if (args.Contains("schedule")) Schedule = true;
+        if (args.Contains("verbose")) VerboseLog = true;
+        if (args.Contains("shortest")) Shortest = true;
     }
 
     internal static string ToText()

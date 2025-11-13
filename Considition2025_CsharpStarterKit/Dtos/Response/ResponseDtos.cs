@@ -153,16 +153,18 @@ public record NodeDto
             return 0;
 
         var zone = gameResponse.ZoneLogs.Last().Zones.Single(z => z.ZoneId == ZoneId);
-        
-        if (zone.TotalProduction - zone.TotalDemand < 0)
-            return 0;
+
+        //if (zone.TotalProduction - zone.TotalDemand < 0)
+        //    return 0;
 
         //if (zone.TotalProduction - zone.TotalDemand < 0)
         //    return 1;        
-        
-        //var score = station.AmountOfAvailableChargers * station.ChargeSpeedPerCharger;
-        var score = (station.TotalAmountOfChargers - station.TotalAmountOfBrokenChargers) * station.ChargeSpeedPerCharger;
 
+        //var score = station.AmountOfAvailableChargers * station.ChargeSpeedPerCharger;
+        if (station.TotalAmountOfChargers - station.TotalAmountOfBrokenChargers <= 0)
+            return 0;
+
+        var score = station.AmountOfAvailableChargers * station.ChargeSpeedPerCharger;
 
         var green = zone.StorageInfo != null && zone.StorageInfo.Any() ? zone.StorageInfo.Select(s => s.StoredGreenPercent).Average() : 0;
         if (persona == "EcoConscious")

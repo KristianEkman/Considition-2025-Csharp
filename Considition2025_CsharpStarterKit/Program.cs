@@ -279,14 +279,6 @@ public class Program
             var p = rec.DijkstraPath(atNode.Id, toStation.Id);
             var d = rec.PathDistance(p, atNode.Id, toStation.Id);
 
-            // This faulty calulation is aparently needed
-            // var needed = d * customer.EnergyConsumptionPerKm;
-            // var actual = customer.ChargeRemaining * customer.MaxCharge;
-            // if (actual < needed)
-            // {
-            //     continue;
-            // }
-
             var needed = d * consumption.batteryPtcPerKm + 0.1f;
             if (customer.ChargeRemaining < needed)
             {
@@ -301,7 +293,15 @@ public class Program
                 }
             }
 
-            if (customer.Persona == "EcoConscious" && ConfigParams.Shortest)
+            var chargerDto = (ChargingStationDto)toStation.Target;
+            if (chargerDto.TotalAmountOfChargers - chargerDto.TotalAmountOfBrokenChargers <= 0)
+            {
+                continue; // No available chargers
+            }
+
+            // if (customer.Persona == "EcoConscious" && ConfigParams.Shortest)
+            // scores much higher on thunderroad but less on the others
+            if (ConfigParams.Shortest)
             {
                 // find the shortest distance station
                 var goalPath = rec.DijkstraPath(toStation.Id, customer.ToNode);

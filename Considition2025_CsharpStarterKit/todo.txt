@@ -1,5 +1,8 @@
-﻿
+﻿Disregard all broken
+
 Charge less to gain time
+
+score function with distance
 
 longer shedule?
 
