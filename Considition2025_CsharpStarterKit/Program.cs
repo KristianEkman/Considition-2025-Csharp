@@ -16,8 +16,8 @@ public class Program
         var client = new ConsiditionClient("http://localhost:8181", apiKey);
         var remoteClient = new ConsiditionClient("https://api.considition.com", apiKey);
 
-        ConfigParams.ReadInput(args);
-        ConfigParams.WriteLine();
+        ConfigParams.ReadArgs(args);
+        ConfigParams.ToText();
         // log time stamp
         File.AppendAllLines(
             "log.txt",
@@ -25,7 +25,7 @@ public class Program
             {
                 "\n----------------",
                 DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
-                ConfigParams.WriteLine(),
+                ConfigParams.ToText(),
             }
         );
 
@@ -104,6 +104,9 @@ public class Program
                 Ticks = [.. goodTicks, currentTick],
             };
         }
+        var topList = TopList.Load();
+        topList.Add(mapName, finalScore);
+        topList.Save();
 
         if (ConfigParams.SaveToServer)
         {
@@ -237,7 +240,7 @@ public class Program
         if (customerRecommendations.Any(c => c.CustomerId == customer.Id))
             return;
 
-        if (customer.ChargeRemaining > ConfigParams.SkipChargeLimit)
+        if (customer.ChargeRemaining > 0.95f)
             return;
 
         if (customer.State == CustomerState.Charging)
@@ -266,6 +269,12 @@ public class Program
                 continue;
             }
 
+            var charger = (ChargingStationDto)toStation.Target;
+            if (charger.TotalAmountOfChargers - charger.TotalAmountOfBrokenChargers <= 0)
+            {
+                continue; // No available chargers
+            }
+
             //Is energy enough to reach this station?
             var p = rec.DijkstraPath(atNode.Id, toStation.Id);
             var d = rec.PathDistance(p, atNode.Id, toStation.Id);
@@ -286,17 +295,33 @@ public class Program
 
             if (customer.State == CustomerState.TransitioningToNode && ConfigParams.Schedule)
             {
-                if (!rec.StationSchedule.IsFree(toStation.Id, tick + 1, tick + 4))
+                if (!rec.StationSchedule.IsFree(toStation.Id, tick + 1, tick + 2))
                 {
                     continue;
                 }
             }
 
-            var stationScore = toStation.GetScore(rec.GameResponse, customer.Persona);
-            if (stationScore > bestStationScore)
+            if (customer.Persona == "EcoConscious" && ConfigParams.Shortest)
             {
-                bestStationScore = stationScore;
-                bestStation = toStation;
+                // find the shortest distance station
+                var goalPath = rec.DijkstraPath(toStation.Id, customer.ToNode);
+                if (goalPath == null || !goalPath.Any()) return;
+                var compinedPath = toStationPath.Concat(goalPath.Skip(1)).ToList();
+                var totalDistance = rec.PathDistance(compinedPath, atNode.Id, customer.ToNode);
+                if (totalDistance < nearestDistance)
+                {
+                    nearestDistance = totalDistance;
+                    bestStation = toStation;
+                }
+            }
+            else
+            {
+                var stationScore = toStation.GetScore(rec.GameResponse, customer.Persona);
+                if (stationScore > bestStationScore)
+                {
+                    bestStationScore = stationScore;
+                    bestStation = toStation;
+                }
             }
         }
 
@@ -308,7 +333,7 @@ public class Program
 
         if (customer.State == CustomerState.TransitioningToNode && ConfigParams.Schedule)
         {
-            if (!rec.StationSchedule.Reserve(bestStation.Id, tick + 1, tick + 4))
+            if (!rec.StationSchedule.Reserve(bestStation.Id, tick + 1, tick + 2))
             {
                 return;
             }

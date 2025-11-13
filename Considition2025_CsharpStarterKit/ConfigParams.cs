@@ -8,38 +8,27 @@ namespace Considition2025_CsharpStarterKit;
 
 internal static class ConfigParams
 {
-    public static float SkipChargeLimit { get; set; } = 0.95f;
-
     public static bool SaveToServer { get; set; } = false;
     public static bool Schedule { get; set; } = false;
 
     public static string MapName { get; set; } = "";
     public static bool VerboseLog { get; set; } = false;
+    public static bool Shortest { get; internal set; } = true;
 
-    internal static void ReadInput(string[]? args)
+    internal static void ReadArgs(string[]? args)
     {
         if (args == null || args.Length == 0)
             return;
+        MapName = args[0];
 
         SaveToServer = args.Contains("save");
         Schedule = args.Contains("schedule");
         VerboseLog = args.Contains("verbose");
-
-        for (int i = 0; i < args.Length; i++)
-        {
-            switch (i)
-            {
-                case 0:
-                    MapName = args[i];
-                    break;
-                default:
-                    break;
-            }
-        }
+        Shortest = args.Contains("shortest");
     }
 
-    internal static string WriteLine()
+    internal static string ToText()
     {
-        return $"Map: {MapName} SkipChargeLimit: {SkipChargeLimit} Save: {SaveToServer} Schedule Stations: {Schedule}";
+        return $"Map: {MapName} Save: {SaveToServer} Schedule: {Schedule} Shortest: {Shortest}";
     }
 }
