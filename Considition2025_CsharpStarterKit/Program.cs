@@ -249,7 +249,7 @@ public class Program
         // Customer wants to reach its destination
         var path = rec.DijkstraPath(atNode.Id, customer.ToNode);
         var dis = rec.PathDistance(path, atNode.Id, customer.ToNode);
-        var batteryCharge = dis * consumption.batteryPtcPerKm + 0.1;
+        var batteryCharge = dis * consumption.batteryPtcPerKm + 0.08f;
         if (customer.ChargeRemaining > batteryCharge && rec.HasCharged.Any(hc => hc.customerId == customer.Id))
             return; // Has enough charge to reach destination, just go there
 
