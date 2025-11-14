@@ -12,7 +12,7 @@ public class Program
 {
     public static async Task Main(string[] args)
     {
-        var apiKey = "5eeb877d-5150-4ba6-884e-23888104341f";
+        var apiKey = "5eeb867d-5150-4bb6-884e-23188104341f";
         var client = new ConsiditionClient("http://localhost:8181", apiKey);
         var remoteClient = new ConsiditionClient("https://api.considition.com", apiKey);
 
